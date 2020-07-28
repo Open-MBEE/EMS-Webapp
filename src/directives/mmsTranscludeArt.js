@@ -39,15 +39,19 @@ function mmsTranscludeArt(ArtifactService, AuthService, URLService) {
             scope.commitId = scope.mmsCommitId ? scope.mmsCommitId : 'latest';
             var reqOb = {artifactId: scope.mmsElementId, projectId: scope.projectId, refId: scope.refId, commitId: scope.commitId};
 
-            var server = URLService.getMmsServer();
-            var ticket = '?alf_ticket=' + AuthService.getTicket();
             element.addClass('isLoading');
             
             // Get the artifacts of the element
             ArtifactService.getArtifact(reqOb)
             .then(function(artifact) {
                 scope.artifact = artifact;
-                scope.url = server + '/alfresco' + artifact.artifactLocation + ticket;
+                scope.url =  URLService.addTicket(
+                    URLService.getArtifactURL({
+                    'projectId': scope.projectId,
+                    'refId': scope.refId,
+                    'elementId': element.id,
+                    'artifactExtension': artifact.extension
+                }));
                 if (artifact.contentType.indexOf('image') > -1) {
                     scope.image = true;
                 }

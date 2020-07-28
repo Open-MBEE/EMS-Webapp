@@ -5,8 +5,9 @@
 angular.module('mmsApp')
 .controller('ToolCtrl', ['$scope', '$rootScope', '$state', '$uibModal', '$q', '$timeout', 'hotkeys',
             'ElementService', 'JobService', 'ProjectService', 'growl', 'projectOb', 'refOb', 'tagObs', 'branchObs', 'documentOb', 'viewOb', 'Utils',
+            'PermissionsService',
 function($scope, $rootScope, $state, $uibModal, $q, $timeout, hotkeys,
-    ElementService, JobService, ProjectService, growl, projectOb, refOb, tagObs, branchObs, documentOb, viewOb, Utils) {
+    ElementService, JobService, ProjectService, growl, projectOb, refOb, tagObs, branchObs, documentOb, viewOb, Utils, PermissionsService) {
 
     $scope.specInfo = {
         refId: refOb.id,
@@ -15,7 +16,7 @@ function($scope, $rootScope, $state, $uibModal, $q, $timeout, hotkeys,
         id: null
     };
     $scope.projectOb = projectOb;
-    $scope.editable = documentOb && documentOb._editable && refOb.type === 'Branch';
+    $scope.editable = documentOb && refOb.type === 'Branch' && PermissionsService.hasBranchEditPermission(refOb);
     $scope.viewOb = viewOb;
     $scope.documentOb = documentOb;
     $scope.refOb = refOb;
@@ -134,7 +135,7 @@ function($scope, $rootScope, $state, $uibModal, $q, $timeout, hotkeys,
         if ($scope.specApi.setEditing) {
             $scope.specApi.setEditing(false);
         }
-        var editable = elementOb._editable && $scope.refOb.type === 'Branch' && commitId === 'latest' ;
+        var editable = $scope.refOb.type === 'Branch' && commitId === 'latest' && PermissionsService.hasBranchEditPermission($scope.refOb);
         $rootScope.ve_tbApi.setPermission('element-editor', editable);
         $rootScope.$digest();
     };
@@ -163,7 +164,7 @@ function($scope, $rootScope, $state, $uibModal, $q, $timeout, hotkeys,
     $scope.$on('viewSelected', function(event, elementOb, commitId) {
         elementSelected(event, elementOb, commitId);
         $scope.viewOb = elementOb;
-        var editable = elementOb._editable && $scope.refOb.type === 'Branch' && commitId === 'latest';
+        var editable = $scope.refOb.type === 'Branch' && commitId === 'latest' && PermissionsService.hasBranchEditPermission($scope.refOb);
         $scope.viewCommitId = commitId ? commitId : elementOb._commitId;
         $rootScope.ve_tbApi.setPermission('view-reorder', editable);
     });

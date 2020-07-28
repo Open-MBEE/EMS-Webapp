@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('mms.directives')
-.directive('mmsSpec', ['Utils', 'AuthService', 'ElementService', 'UtilsService', 'ViewService', '$templateCache', 'growl', '_', mmsSpec]);
+.directive('mmsSpec', ['Utils', 'AuthService', 'ElementService', 'UtilsService', 'ViewService', 'PermissionsService',
+    '$templateCache', 'growl', '_', mmsSpec]);
 
 /**
  * @ngdoc directive
@@ -71,7 +72,7 @@ angular.module('mms.directives')
  * @param {Object=} mmsElement An element object, if this is provided, a read only
  *      element spec for it would be shown, this will not use mms services to get the element
  */
-function mmsSpec(Utils, AuthService, ElementService, UtilsService, ViewService, $templateCache, growl, _) {
+function mmsSpec(Utils, AuthService, ElementService, UtilsService, ViewService, PermissionsService, $templateCache, growl, _) {
     var template = $templateCache.get('mms/templates/mmsSpec.html');
 
     var mmsSpecLink = function(scope, domElement, attrs) {
@@ -153,8 +154,7 @@ function mmsSpec(Utils, AuthService, ElementService, UtilsService, ViewService, 
                         }
                     });
                 }
-                if (!scope.element._editable ||
-                        (scope.mmsCommitId !== 'latest' && scope.mmsCommitId)) {
+                if ((scope.mmsCommitId !== 'latest' && scope.mmsCommitId) || !PermissionsService.hasProjectIdBranchIdEditPermission(scope.mmsProjectId, scope.mmsRefId)) {
                     scope.editable = false;
                     scope.edit = null;
                     scope.editing = false;

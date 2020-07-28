@@ -720,7 +720,7 @@ function ElementService($q, $http, URLService, UtilsService, CacheService, HttpS
         UtilsService.normalize(reqOb);
         var url = URLService.getElementSearchURL(reqOb);
         var deferred = $q.defer();
-        $http.put(url, query)
+        $http.post(url, query)
             .then(function(data) {
                 //var result = [];
                 //for (var i = 0; i < data.data.elements.length; i++) {

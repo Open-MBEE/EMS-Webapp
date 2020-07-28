@@ -470,12 +470,14 @@ function mmsCkeditor($uibModal, $templateCache, $timeout, growl, CKEDITOR, _, Ca
                 var formData = new FormData();
                 var xhr = fileLoader.xhr;
 
-                xhr.open( 'POST', URLService.getPutArtifactsURL({projectId: scope.mmsProjectId, refId: scope.mmsRefId}), true );
-                formData.append('id', UtilsService.createMmsId().replace('MMS', 'VE'));
+                xhr.open( 'POST', URLService.getPutArtifactsURL({projectId: scope.mmsProjectId, refId: scope.mmsRefId, elementId: UtilsService.createMmsId().replace('MMS', 'VE')}), true );                
+                //xhr.withCredentials = true;
+                xhr.setRequestHeader('Authorization', URLService.getAuthorizationHeaderValue());
                 formData.append('file', fileLoader.file, fileLoader.fileName );
                 if (fileLoader.fileName) {
                     formData.append('name', fileLoader.fileName);
                 }
+                
                 fileLoader.xhr.send( formData );
 
                 // Prevented the default behavior.
@@ -490,12 +492,14 @@ function mmsCkeditor($uibModal, $templateCache, $timeout, growl, CKEDITOR, _, Ca
                 var xhr = data.fileLoader.xhr;
                 var response = JSON.parse(xhr.response);
             
-                if ( !response.artifacts || response.artifacts.length == 0) {
+                if ( !response.elements || response.elements.length == 0 || !response.elements[0]._artifacts || response.elements[0]._artifacts.length == 0) {
                     // An error occurred during upload.
                     //data.message = response[ 1 ];
                     evt.cancel();
                 } else {
-                    data.url = '/alfresco' + response.artifacts[0].artifactLocation;
+                    //TODO does this need to be smarter?
+                    var element = response.elements[0];
+                    data.url = URLService.getArtifactURL({projectId: element._projectId, refId: element._refId, elementId: element.id, artifactExtension: element._artifacts[0].extension });
                 }
             } );
         }, 0, false);

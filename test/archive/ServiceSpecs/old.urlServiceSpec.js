@@ -37,7 +37,6 @@ describe('URLService', function() {
 		expect(URLService.getConfigURL).toBeDefined();
 		expect(URLService.getSiteConfigsURL).toBeDefined();
 		expect(URLService.getConfigProductsURL).toBeDefined();
-		expect(URLService.getDocumentViewsURL).toBeDefined();
 		expect(URLService.getViewElementsURL).toBeDefined();
 	}));
 
@@ -106,23 +105,6 @@ describe('URLService', function() {
 		// version
 		expectedReturn = root + '/workspaces/master/elements/elementId/versions/versionId';
 		expect(URLService.getElementURL('elementId', 'master', 'versionId')).toBe(expectedReturn);
-	}));
-
-	// !-- NOTE: this function uses old API web services --!
-	// !-- NOTE: this function does not add version function --!
-	it('getDocumentViewsURL', inject(function() {
-		expectedReturn = root + '/workspaces/master/sites/ems/products/productId/views';
-
-		// latest
-		expect(URLService.getDocumentViewsURL('productId', 'master', 'latest')).toEqual(expectedReturn);
-
-		// timestamp
-		expectedReturn += '?timestamp=01-01-2014';
-		expect(URLService.getDocumentViewsURL('productId', 'master', '01-01-2014')).toEqual(expectedReturn);
-
-		// version
-		expectedReturn = root + '/workspaces/master/sites/ems/products/productId/views/versions/versionId';
-		expect(URLService.getDocumentViewsURL('productId', 'master', 'versionId')).toEqual(expectedReturn);
 	}));
 
 	// !-- NOTE: this function uses old API web services --!

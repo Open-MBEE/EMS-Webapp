@@ -5,10 +5,10 @@
 angular.module('mmsApp')
     .controller('ViewCtrl', ['$scope', '$rootScope', '$state', '$timeout', '$window', '$location',
     '$http', '$element', 'growl', 'hotkeys', 'MmsAppUtils', 'UxService', 'URLService', 'UtilsService', 'ShortenUrlService', 'Utils',
-    'search', 'orgOb', 'projectOb', 'refOb', 'groupOb', 'documentOb', 'viewOb',
+    'search', 'orgOb', 'projectOb', 'refOb', 'groupOb', 'documentOb', 'viewOb', 'PermissionsService',
     function($scope, $rootScope, $state, $timeout, $window, $location, $http,
              $element, growl, hotkeys, MmsAppUtils, UxService, URLService, UtilsService, ShortenUrlService, Utils,
-             search, orgOb, projectOb, refOb, groupOb, documentOb, viewOb) {
+             search, orgOb, projectOb, refOb, groupOb, documentOb, viewOb, PermissionsService) {
 
     function isPageLoading() {
         if ($element.find('.isLoading').length > 0) {
@@ -83,7 +83,7 @@ angular.module('mmsApp')
 
     $scope.bbApi = {
         init: function() {
-            if (viewOb && viewOb._editable && refOb.type === 'Branch') {
+            if (viewOb && refOb.type === 'Branch' && PermissionsService.hasBranchEditPermission(refOb)) {
                 $scope.bbApi.addButton(UxService.getButtonBarButton('show-edits'));
                 $scope.bbApi.setToggleState('show-edits', $rootScope.ve_editmode);
                 hotkeys.bindTo($scope)

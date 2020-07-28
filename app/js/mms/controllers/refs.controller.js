@@ -40,8 +40,6 @@ function($sce, $q, $filter, $location, $uibModal, $scope, $rootScope, $state, $t
     }
 
     $scope.htmlTooltip = $sce.trustAsHtml('Branch temporarily unavailable during duplication.');
-    // $scope.htmlTooltip = $sce.trustAsHtml('Branch temporarily unavailable during duplication.<br>Branch author will be notified by email upon completion.');
-    // var refPerm = projectOb && projectOb._editable;
 
     $scope.addBranch = function(e) {
         addItem('Branch');

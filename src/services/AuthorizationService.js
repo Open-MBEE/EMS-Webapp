@@ -22,10 +22,10 @@ function AuthService($q, $http, CacheService, URLService, HttpService, ElementSe
     var ticket = $window.localStorage.getItem('ticket');
     var getAuthorized = function (credentials) {
         var deferred = $q.defer();
-        var loginURL = '/alfresco/service/api/login';
+        var loginURL = URLService.getAuthenticationUrl();
         $http.post(loginURL, credentials).then(function (success) {
-            URLService.setTicket(success.data.data.ticket);
-            ticket = success.data.data.ticket;
+            URLService.setTicket(success.data.token);
+            ticket = success.data.token;
             $window.localStorage.setItem('ticket', ticket);
             deferred.resolve(ticket);
         }, function(fail){
@@ -57,7 +57,7 @@ function AuthService($q, $http, CacheService, URLService, HttpService, ElementSe
             return deferred.promise;
         }
 
-        $http.get(URLService.getCheckTicketURL(ticket)).then(function (success) {
+        $http.get(URLService.getCheckTicketURL()).then(function (success) {
             deferred.resolve(success.data.username);
             $analytics.setUsername(success.data.username);
         }, function(fail){

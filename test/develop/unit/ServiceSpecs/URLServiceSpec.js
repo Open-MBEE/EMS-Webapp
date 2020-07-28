@@ -152,35 +152,6 @@ describe("URLService", function () {
 		});
 	});
 
-  //   describe('Method getOwnedElementURL', function () {
-  //   	var reqOb = {
-		// 	projectId: "heyaproject",
-		// 	elementId: "heyanelement",
-		// 	refId: 'master',
-		// 	commitId: 'latest',
-		// 	depth: 15,
-		// 	extended: true
-		// };
-  //       it('should create the url for all owned elements', inject(function () {
-  //  			var ownedElementUrl = root + '/projects/' + reqOb.projectId + '/refs/' + reqOb.refId + '/elements/' + reqOb.elementId;
-  //           expect(ownedElementUrl).toEqual(URLServiceObj.getOwnedElementURL(reqOb));
-  //       }));
-  //   });
-
-	describe('Method getDocumentViewsURL', function () {
-		var reqOb = {
-			projectId: "heyaproject",
-			elementId: "heyanelement",
-			refId: 'master',
-			commitId: 'latest',
-			accept: true
-		};
-		it('should create the url for the document views', function () {
-			var documentViewsUrl = root + '/projects/' + reqOb.projectId + '/refs/' + reqOb.refId + '/documents/' + reqOb.elementId + '/views';
-			expect(documentViewsUrl).toBe(URLServiceObj.getDocumentViewsURL(reqOb));
-		});
-	});
-
 	describe('Method getElementHistoryURL', function () {
 		var reqOb = {
 			projectId: "heyaproject",

@@ -3,8 +3,8 @@
 /* Controllers */
 
 angular.module('mmsApp')
-.controller('ToolbarCtrl', ['$scope', '$rootScope', '$state', 'UxService', 'refOb', 'documentOb', 
-function($scope, $rootScope, $state, UxService, refOb, documentOb) {
+.controller('ToolbarCtrl', ['$scope', '$rootScope', '$state', 'UxService', 'refOb', 'documentOb', 'PermissionsService',
+function($scope, $rootScope, $state, UxService, refOb, documentOb, PermissionsService) {
 
     var tbApi = {};
     $scope.tbApi = tbApi;
@@ -29,14 +29,14 @@ function($scope, $rootScope, $state, UxService, refOb, documentOb) {
             tbApi.addButton(UxService.getToolbarButton("jobs"));
         // }
         if ($state.includes('project.ref') && !$state.includes('project.ref.document')) {
-            editable = documentOb._editable && refOb.type === 'Branch';
+            editable = refOb.type === 'Branch' && PermissionsService.hasBranchEditPermission(refOb);
             tbApi.setPermission('element-editor', editable);
             if ($state.includes('project.ref.preview')) {
                 tbApi.addButton(UxService.getToolbarButton("view-reorder"));
                 tbApi.setPermission("view-reorder", editable);
             }
         } else if ($state.includes('project.ref.document')) {
-            editable = documentOb._editable && refOb.type === 'Branch';
+            editable = refOb.type === 'Branch' && PermissionsService.hasBranchEditPermission(refOb);
             tbApi.addButton(UxService.getToolbarButton("view-reorder"));
             tbApi.setPermission('element-editor', editable);
             tbApi.setPermission("view-reorder", editable);

@@ -74,11 +74,12 @@ module.exports = function(grunt) {
             port: serverPort
           },
           {
-            context: '/alfresco',  // '/api'
+            context: '/api',
             host: servers[key],
             changeOrigin: true,
             https: serverHttps,
-            port: serverPort
+            port: serverPort,
+            rewrite: { '^/api': ''}
           }
         ]
       };

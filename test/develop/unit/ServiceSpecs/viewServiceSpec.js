@@ -160,25 +160,6 @@ xdescribe('Service: ViewService', function() {
 		});
 	});
 
-	describe('Method: getDocumentViews', function() {
-		it('it should get the view objects for a document', function() {
-			var result;
- 			var testElem = {
-				projectId: "heyaproject",
-				elementId: "heyanelement",
-				refId: 'master',
-				commitId: 'latest'
-			};
-			$httpBackend.when('GET', root + '/elements/heyanelement').respond(testElem);
-			ViewServiceObj.getDocumentViews(testElem).then(function(data) {
-				result = data;
-			}, function(reason) {
-				result = reason.message;
-			});
-			expect(result).toEqual(testElem);
-		});
-	});
-
 	describe('Method: addViewtToParentView', function() {
 		it('it should get the view objects for a document', function() {
 			var result;

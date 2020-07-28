@@ -5,10 +5,10 @@
 angular.module('mmsApp')
 .controller('TreeCtrl', ['$anchorScroll' , '$q', '$filter', '$location', '$uibModal', '$scope', '$rootScope', '$state','$timeout', 'growl',
                           'UxService', 'ElementService', 'UtilsService', 'ViewService', 'ProjectService', 'MmsAppUtils', 'documentOb', 'viewOb',
-                          'orgOb', 'projectOb', 'refOb', 'refObs', 'groupObs', 'docMeta',
+                          'orgOb', 'projectOb', 'refOb', 'refObs', 'groupObs', 'docMeta', 'PermissionsService',
 function($anchorScroll, $q, $filter, $location, $uibModal, $scope, $rootScope, $state, $timeout, growl,
     UxService, ElementService, UtilsService, ViewService, ProjectService, MmsAppUtils, documentOb, viewOb,
-    orgOb, projectOb, refOb, refObs, groupObs, docMeta) {
+    orgOb, projectOb, refOb, refObs, groupObs, docMeta, PermissionsService) {
 
     $scope.filterInputPlaceholder = 'Filter groups/docs';
     if ($state.includes('project.ref.document')) {
@@ -32,7 +32,7 @@ function($anchorScroll, $q, $filter, $location, $uibModal, $scope, $rootScope, $
     if ($state.includes('project.ref.document.full')) {
         $rootScope.ve_fullDocMode = true;
     }
-    var docEditable = documentOb && documentOb._editable && refOb && refOb.type === 'Branch' && UtilsService.isView(documentOb);
+    var docEditable = documentOb && refOb && refOb.type === 'Branch' && UtilsService.isView(documentOb) && PermissionsService.hasBranchEditPermission(refOb);
 
     $scope.tbApi.init = function() {
         if ($state.includes('project.ref.document')) {
@@ -47,11 +47,11 @@ function($anchorScroll, $q, $filter, $location, $uibModal, $scope, $rootScope, $
         $scope.bbApi.addButton(UxService.getButtonBarButton("tree-collapse"));
         if ($state.includes('project.ref') && !$state.includes('project.ref.document')) {
             $scope.bbApi.addButton(UxService.getButtonBarButton("tree-reorder-group"));
-            $scope.bbApi.setPermission("tree-reorder-group", projectOb && projectOb._editable);
+            $scope.bbApi.setPermission("tree-reorder-group", projectOb && PermissionsService.hasProjectEditPermission(projectOb));
             $scope.bbApi.addButton(UxService.getButtonBarButton("tree-add-document-or-group"));
             $scope.bbApi.addButton(UxService.getButtonBarButton("tree-delete-document"));
-            $scope.bbApi.setPermission( "tree-add-document-or-group", documentOb._editable && (refOb.type === 'Tag' ? false : true) );
-            $scope.bbApi.setPermission( "tree-delete-document", documentOb._editable &&  (refOb.type === 'Tag' ? false : true) );
+            $scope.bbApi.setPermission( "tree-add-document-or-group", (refOb.type === 'Tag' ? false : true) && PermissionsService.hasBranchEditPermission(refOb) );
+            $scope.bbApi.setPermission( "tree-delete-document", (refOb.type === 'Tag' ? false : true) && PermissionsService.hasBranchEditPermission(refOb) );
         } else if ($state.includes('project.ref.document')) {
             // $scope.tbApi.addButton(UxService.getButtonBarButton("view-mode-dropdown"));
             //$scope.bbApi.setToggleState('tree-show-pe', $rootScope.veTreeShowPe);

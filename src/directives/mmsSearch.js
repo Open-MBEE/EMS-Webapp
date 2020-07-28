@@ -98,16 +98,16 @@ function mmsSearch($window, $anchorScroll, CacheService, ElementService, Project
 
         // Get metatypes for dropdown options
         var getMetaTypes = function () {
-            scope.metatypeSearch = "fa fa-spin fa-spinner";
-            ProjectService.getMetatypes(scope.mmsProjectId, scope.refId)
-                .then(function (data) {
-                    // cache metatypes
-                    scope.metatypeList = data;
-                }, function (reason) {
-                    growl.error("Search Error: " + reason.message);
-                }).finally(function () {
-                    scope.metatypeSearch = "";
-                });
+            // scope.metatypeSearch = "fa fa-spin fa-spinner";
+            // ProjectService.getMetatypes(scope.mmsProjectId, scope.refId)
+            //     .then(function (data) {
+            //         // cache metatypes
+            //         scope.metatypeList = data;
+            //     }, function (reason) {
+            //         growl.error("Search Error: " + reason.message);
+            //     }).finally(function () {
+            //         scope.metatypeSearch = "";
+            //     });
         };
         getMetaTypes();
 
@@ -396,7 +396,7 @@ function mmsSearch($window, $anchorScroll, CacheService, ElementService, Project
                         scope.searchResults = elements;
                         baseSearchResults = elements;
                     }
-                    combineRelatedViews(scope);
+                    //combineRelatedViews(scope);
                     scope.totalResults = data.total;
                     scope.maxPages = Math.ceil(scope.totalResults/scope.itemsPerPage);
                     scope.currentPage = page;
@@ -432,37 +432,37 @@ function mmsSearch($window, $anchorScroll, CacheService, ElementService, Project
          *
          * @return {object} Elastic query JSON object with list of project mounts
          */
-        var getProjectMountsQuery = function () {
-            var projList = [];
-            var projectTermsOb = {};
+        // var getProjectMountsQuery = function () {
+        //     var projList = [];
+        //     var projectTermsOb = {};
 
-            var mountCacheKey = ['project-mounts', scope.mmsProjectId, scope.refId];
-            if (CacheService.exists(mountCacheKey)) {
-                projList = CacheService.get(mountCacheKey);
-            } else {
-                // Get project element data to gather mounted project list
-                var cacheKey = ['project', scope.mmsProjectId, scope.refId];
-                var cachedProj = CacheService.get(cacheKey);
-                if (cachedProj) {
-                    getAllMountsAsArray(cachedProj, projList);
-                } else {
-                    var project = {
-                        'id': scope.mmsProjectId,
-                        '_refId': scope.refId
-                    };
-                    getAllMountsAsArray(project, projList);
-                }
-                CacheService.put(mountCacheKey, projList, false);
-            }
+        //     var mountCacheKey = ['project-mounts', scope.mmsProjectId, scope.refId];
+        //     if (CacheService.exists(mountCacheKey)) {
+        //         projList = CacheService.get(mountCacheKey);
+        //     } else {
+        //         // Get project element data to gather mounted project list
+        //         var cacheKey = ['project', scope.mmsProjectId, scope.refId];
+        //         var cachedProj = CacheService.get(cacheKey);
+        //         if (cachedProj) {
+        //             getAllMountsAsArray(cachedProj, projList);
+        //         } else {
+        //             var project = {
+        //                 'id': scope.mmsProjectId,
+        //                 '_refId': scope.refId
+        //             };
+        //             getAllMountsAsArray(project, projList);
+        //         }
+        //         CacheService.put(mountCacheKey, projList, false);
+        //     }
 
-            // Create Elastic filter
-            var q = {};
-            q._projectId = projList;
-            projectTermsOb.bool = {
-                should: projList
-            };
-            return projectTermsOb;
-        };
+        //     // Create Elastic filter
+        //     var q = {};
+        //     q._projectId = projList;
+        //     projectTermsOb.bool = {
+        //         should: projList
+        //     };
+        //     return projectTermsOb;
+        // };
 
         /**
          * @ngdoc function
@@ -499,92 +499,92 @@ function mmsSearch($window, $anchorScroll, CacheService, ElementService, Project
             return;
         };
 
-        var buildSearchClause = function (query) {
-            var clause = {};
-            var q = {};
-            var valueSearchFields = ["defaultValue.value^3", "value.value^3", "specification.value^3"];
-            if (query.searchType.id === 'all') {
-                // Set query term for ID
-                var idQuery = {};
-                idQuery.term = {
-                    "id": {
-                        "value": query.searchText,
-                        "boost": 10.0
-                    }
-                };
+        // var buildSearchClause = function (query) {
+        //     var clause = {};
+        //     var q = {};
+        //     var valueSearchFields = ["defaultValue.value^3", "value.value^3", "specification.value^3"];
+        //     if (query.searchType.id === 'all') {
+        //         // Set query term for ID
+        //         var idQuery = {};
+        //         idQuery.term = {
+        //             "id": {
+        //                 "value": query.searchText,
+        //                 "boost": 10.0
+        //             }
+        //         };
 
-                // Set query for value,doc,name fields
-                var allQuery = {};
-                q.query = query.searchText;
-                q.fields = valueSearchFields.slice();
-                q.fields.push('name^5', 'documentation');
-                q.fuzziness = 'AUTO';
-                allQuery.multi_match = q;
-                clause = {
-                    "bool": {
-                        "should": [
-                            idQuery,
-                            allQuery
-                        ]
-                    }
-                };
-            } else if (query.searchType.id === 'name' || query.searchType.id === 'documentation') {
-                // "{"query":{"bool":{"must":[{"match":{"name":"val"}}]}}}"
-                // "{"query":{"bool":{"must":[{"match":{"documentation":"val"}}]}}}"
-                var type = query.searchType.id;
-                q[type] = {
-                    query: query.searchText,
-                    fuzziness: 'AUTO'
-                };
-                clause.match = q;
-            } else if (query.searchType.id === 'id') {
-                // "{"query":{"bool":{"must":[{"term":{"id":"val"}}]}}}"
-                clause.term = {
-                    "id": query.searchText
-                };
-            } else if (query.searchType.id === 'value') {
-                // "{"query":{"bool":{"must":[{"multi_match":{"query":"val","fields":["defaultValue.value","value.value","specification.value"]}}]}}}"
-                q.query = query.searchText;
-                q.fields = valueSearchFields;
-                q.fuzziness = 'AUTO';
-                clause.multi_match = q;
-            } else if (query.searchType.id === 'metatype') {
-                var metatypeFilterList = _.pluck(query.selectedSearchMetatypes, 'id');
+        //         // Set query for value,doc,name fields
+        //         var allQuery = {};
+        //         q.query = query.searchText;
+        //         q.fields = valueSearchFields.slice();
+        //         q.fields.push('name^5', 'documentation');
+        //         q.fuzziness = 'AUTO';
+        //         allQuery.multi_match = q;
+        //         clause = {
+        //             "bool": {
+        //                 "should": [
+        //                     idQuery,
+        //                     allQuery
+        //                 ]
+        //             }
+        //         };
+        //     } else if (query.searchType.id === 'name' || query.searchType.id === 'documentation') {
+        //         // "{"query":{"bool":{"must":[{"match":{"name":"val"}}]}}}"
+        //         // "{"query":{"bool":{"must":[{"match":{"documentation":"val"}}]}}}"
+        //         var type = query.searchType.id;
+        //         q[type] = {
+        //             query: query.searchText,
+        //             fuzziness: 'AUTO'
+        //         };
+        //         clause.match = q;
+        //     } else if (query.searchType.id === 'id') {
+        //         // "{"query":{"bool":{"must":[{"term":{"id":"val"}}]}}}"
+        //         clause.term = {
+        //             "id": query.searchText
+        //         };
+        //     } else if (query.searchType.id === 'value') {
+        //         // "{"query":{"bool":{"must":[{"multi_match":{"query":"val","fields":["defaultValue.value","value.value","specification.value"]}}]}}}"
+        //         q.query = query.searchText;
+        //         q.fields = valueSearchFields;
+        //         q.fuzziness = 'AUTO';
+        //         clause.multi_match = q;
+        //     } else if (query.searchType.id === 'metatype') {
+        //         var metatypeFilterList = _.pluck(query.selectedSearchMetatypes, 'id');
 
-                // Get all _appliedStereotypeIds, which have `_`
-                var appliedStereotypeFilter = [],
-                    typeFilter = [];
-                for (var i = 0; i < metatypeFilterList.length; i++) {
-                    //if underscore = appliedsterortype otherwise 'type'
-                    if (metatypeFilterList[i].includes('_')) {
-                        console.log(metatypeFilterList[i]);
-                        appliedStereotypeFilter.push(metatypeFilterList[i]);
-                    } else {
-                        typeFilter.push(metatypeFilterList[i]);
-                    }
-                }
-                // metatype clause
-                clause = {
-                    "bool": {
-                        "should": [{
-                                "terms": {
-                                    "_appliedStereotypeIds": appliedStereotypeFilter
-                                }
-                            },
-                            {
-                                "terms": {
-                                    "type": typeFilter
-                                }
-                            }
-                        ],
-                        "minimum_should_match": 1
-                    }
-                };
-            }
-            return clause;
-        };
+        //         // Get all _appliedStereotypeIds, which have `_`
+        //         var appliedStereotypeFilter = [],
+        //             typeFilter = [];
+        //         for (var i = 0; i < metatypeFilterList.length; i++) {
+        //             //if underscore = appliedsterortype otherwise 'type'
+        //             if (metatypeFilterList[i].includes('_')) {
+        //                 console.log(metatypeFilterList[i]);
+        //                 appliedStereotypeFilter.push(metatypeFilterList[i]);
+        //             } else {
+        //                 typeFilter.push(metatypeFilterList[i]);
+        //             }
+        //         }
+        //         // metatype clause
+        //         clause = {
+        //             "bool": {
+        //                 "should": [{
+        //                         "terms": {
+        //                             "_appliedStereotypeIds": appliedStereotypeFilter
+        //                         }
+        //                     },
+        //                     {
+        //                         "terms": {
+        //                             "type": typeFilter
+        //                         }
+        //                     }
+        //                 ],
+        //                 "minimum_should_match": 1
+        //             }
+        //         };
+        //     }
+        //     return clause;
+        // };
 
-        /**
+         /**
          * @ngdoc function
          * @name mms.directives.directive:mmsSearch#buildQuery
          * @methodOf mms.directives.directive:mmsSearch
@@ -593,147 +593,171 @@ function mmsSearch($window, $anchorScroll, CacheService, ElementService, Project
          * Build JSON object for Elastic query.
          *
          *
-         * @return {object} {{query: {bool: {must: *[]}}}} JSON object from post data.
+         * @return {object} Basic Search JSON.
          */
         var buildQuery = function (query) {
-            // Set project and mounted projects filter
-            var projectTermsOb = getProjectMountsQuery();
-            var filterList = [projectTermsOb];
-
-            // Set custom filter options for query
-            if (scope.mmsOptions.filterQueryList) {
-                angular.forEach(scope.mmsOptions.filterQueryList, function (filterOb) {
-                    filterList.push(filterOb());
-                });
-            }
-
-            // Set filter for all views and docs, if selected
-            if (scope.docsviews.selected) {
-                var viewsAndDocs = {
-                    terms: {
-                        '_appliedStereotypeIds': [UtilsService.VIEW_SID, UtilsService.DOCUMENT_SID].concat(UtilsService.OTHER_VIEW_SID)
-                    }
-                };
-                filterList.push(viewsAndDocs);
-            }
-            filterList.push({
-                "type": {
-                    "value": "element"
-                }
-            });
-
-            // Set main query
-            var mainBoolQuery = {};
-            var jsonQueryOb = {};
-            var rowLength = scope.advanceSearchRows.length;
-            if (!scope.advanceSearch || rowLength === 0) {
-                mainBoolQuery = buildSearchClause(query);
-                mainBoolQuery = {
-                    "bool": {
-                        "must": mainBoolQuery,
-                    }
-                };
-            } else {
-                var clause2, clause1 = buildSearchClause(scope.mainSearch);
-                for (var i = 0; i < rowLength; i++) {
-                    // if must, must_not or should
-                    var row = scope.advanceSearchRows[i];
-                    var operator = row.operator;
-                    clause2 = buildSearchClause(row);
-                    if (operator === "And") {
-                        clause1 = {
-                            "bool": {
-                                "must": [clause1, clause2]
-                            }
-                        };
-                    } else if (operator === "Or") {
-                        clause1 = {
-                            "bool": {
-                                "should": [clause1, clause2],
-                                "minimum_should_match": 1
-                            }
-                        };
-                    } else if (operator === "And Not") {
-                        clause1 = {
-                            "bool": {
-                                "must": [clause1, {
-                                    "bool": {
-                                        "must_not": clause2
-                                    }
-                                }]
-                            }
-                        };
-                    }
-                }
-                mainBoolQuery = clause1;
-            }
-
-            jsonQueryOb = {
-                "sort": [
-                    "_score",
-                    {
-                        "_modified": {
-                            "order": "desc"
-                        }
-                    }
-                ],
-                "query": {},
-                "indices_boost" : [ {} ]
+            var result = {
+                "params": {}
             };
-            jsonQueryOb.query = mainBoolQuery;
-            jsonQueryOb.query.bool.filter = filterList;
-            jsonQueryOb.indices_boost[0][scope.mmsProjectId.toLowerCase()] = 2;
-            jsonQueryOb.aggs = getAggs();
-            return jsonQueryOb;
+            var field = query.searchType.id;
+            if(field == 'all') {
+                field = '*';
+            }
+            result.params[field] = query.searchText;
+            return result;
         };
 
-        var getAggs = function () {
-            return {
-                "elements": {
-                    "filter": {
-                        "bool": {
-                            "must": [{
-                                    "term": {
-                                        "_projectId": 'PROJECT-5d574aa8-bc06-4e95-bf71-3f2151833e09'
-                                    }
-                                },
-                                {
-                                    "term": {
-                                        "_inRefIds": 'master'
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "aggs": {
-                        "types": {
-                            "terms": {
-                                "field": "type",
-                                "size": 20
-                            }
-                        }
-                    }
-                }
-            };
-        };
+        // /**
+        //  * @ngdoc function
+        //  * @name mms.directives.directive:mmsSearch#buildQuery
+        //  * @methodOf mms.directives.directive:mmsSearch
+        //  *
+        //  * @description
+        //  * Build JSON object for Elastic query.
+        //  *
+        //  *
+        //  * @return {object} {{query: {bool: {must: *[]}}}} JSON object from post data.
+        //  */
+        // var buildQuery = function (query) {
+        //     $window.alert(query);
+        //     // Set project and mounted projects filter
+        //     var projectTermsOb = getProjectMountsQuery();
+        //     var filterList = [projectTermsOb];
 
-        var combineRelatedViews = function(scope) {
-            scope.searchResults.forEach(function(element) {
-                var allRelatedDocuments = [];
-                if (element._relatedDocuments) {
-                    element._relatedDocuments.forEach(function(relatedDoc) {
-                        relatedDoc._parentViews.forEach(function(parentView) {
-                            allRelatedDocuments.push({
-                                relatedDocument: relatedDoc,
-                                relatedView: parentView
-                            });
-                        });
-                    });
-                }
-                element.allRelatedDocuments = allRelatedDocuments;
-                element.someRelatedDocuments = allRelatedDocuments.slice(0, 3);
-            });
-        };
+        //     // Set custom filter options for query
+        //     if (scope.mmsOptions.filterQueryList) {
+        //         angular.forEach(scope.mmsOptions.filterQueryList, function (filterOb) {
+        //             filterList.push(filterOb());
+        //         });
+        //     }
+
+        //     // Set filter for all views and docs, if selected
+        //     if (scope.docsviews.selected) {
+        //         var viewsAndDocs = {
+        //             terms: {
+        //                 '_appliedStereotypeIds': [UtilsService.VIEW_SID, UtilsService.DOCUMENT_SID].concat(UtilsService.OTHER_VIEW_SID)
+        //             }
+        //         };
+        //         filterList.push(viewsAndDocs);
+        //     }
+        //     filterList.push({
+        //         "type": {
+        //             "value": "element"
+        //         }
+        //     });
+
+        //     // Set main query
+        //     var mainBoolQuery = {};
+        //     var jsonQueryOb = {};
+        //     var rowLength = scope.advanceSearchRows.length;
+        //     if (!scope.advanceSearch || rowLength === 0) {
+        //         mainBoolQuery = buildSearchClause(query);
+        //         mainBoolQuery = {
+        //             "bool": {
+        //                 "must": mainBoolQuery,
+        //             }
+        //         };
+        //     } else {
+        //         var clause2, clause1 = buildSearchClause(scope.mainSearch);
+        //         for (var i = 0; i < rowLength; i++) {
+        //             // if must, must_not or should
+        //             var row = scope.advanceSearchRows[i];
+        //             var operator = row.operator;
+        //             clause2 = buildSearchClause(row);
+        //             if (operator === "And") {
+        //                 clause1 = {
+        //                     "bool": {
+        //                         "must": [clause1, clause2]
+        //                     }
+        //                 };
+        //             } else if (operator === "Or") {
+        //                 clause1 = {
+        //                     "bool": {
+        //                         "should": [clause1, clause2],
+        //                         "minimum_should_match": 1
+        //                     }
+        //                 };
+        //             } else if (operator === "And Not") {
+        //                 clause1 = {
+        //                     "bool": {
+        //                         "must": [clause1, {
+        //                             "bool": {
+        //                                 "must_not": clause2
+        //                             }
+        //                         }]
+        //                     }
+        //                 };
+        //             }
+        //         }
+        //         mainBoolQuery = clause1;
+        //     }
+
+        //     jsonQueryOb = {
+        //         "sort": [
+        //             "_score",
+        //             {
+        //                 "_modified": {
+        //                     "order": "desc"
+        //                 }
+        //             }
+        //         ],
+        //         "query": {},
+        //         "indices_boost" : [ {} ]
+        //     };
+        //     jsonQueryOb.query = mainBoolQuery;
+        //     jsonQueryOb.query.bool.filter = filterList;
+        //     jsonQueryOb.indices_boost[0][scope.mmsProjectId.toLowerCase()] = 2;
+        //     jsonQueryOb.aggs = getAggs();
+        //     return jsonQueryOb;
+        // };
+
+        // var getAggs = function () {
+        //     return {
+        //         "elements": {
+        //             "filter": {
+        //                 "bool": {
+        //                     "must": [{
+        //                             "term": {
+        //                                 "_projectId": 'PROJECT-5d574aa8-bc06-4e95-bf71-3f2151833e09'
+        //                             }
+        //                         },
+        //                         {
+        //                             "term": {
+        //                                 "_inRefIds": 'master'
+        //                             }
+        //                         }
+        //                     ]
+        //                 }
+        //             },
+        //             "aggs": {
+        //                 "types": {
+        //                     "terms": {
+        //                         "field": "type",
+        //                         "size": 20
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     };
+        // };
+
+        // var combineRelatedViews = function(scope) {
+        //     scope.searchResults.forEach(function(element) {
+        //         var allRelatedDocuments = [];
+        //         if (element._relatedDocuments) {
+        //             element._relatedDocuments.forEach(function(relatedDoc) {
+        //                 relatedDoc._parentViews.forEach(function(parentView) {
+        //                     allRelatedDocuments.push({
+        //                         relatedDocument: relatedDoc,
+        //                         relatedView: parentView
+        //                     });
+        //                 });
+        //             });
+        //         }
+        //         element.allRelatedDocuments = allRelatedDocuments;
+        //         element.someRelatedDocuments = allRelatedDocuments.slice(0, 3);
+        //     });
+        // };
 
         // Set options
         if (scope.mmsOptions.searchResult) {

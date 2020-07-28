@@ -5,8 +5,9 @@
 angular.module('mmsApp')
 .controller('FullDocCtrl', ['$scope', '$rootScope', '$state', '$anchorScroll', '$location', '$timeout', '$http', 'FullDocumentService', 'ShortenUrlService',
     'hotkeys', 'growl', '_', 'MmsAppUtils', 'Utils', 'UxService', 'URLService', 'UtilsService', 'search', 'orgOb', 'projectOb', 'refOb', 'groupOb', 'documentOb',
+    'PermissionsService',
 function($scope, $rootScope, $state, $anchorScroll, $location, $timeout, $http, FullDocumentService, ShortenUrlService, hotkeys, growl, _,
-    MmsAppUtils, Utils, UxService, URLService, UtilsService, search, orgOb, projectOb, refOb, groupOb, documentOb) {
+    MmsAppUtils, Utils, UxService, URLService, UtilsService, search, orgOb, projectOb, refOb, groupOb, documentOb, PermissionsService) {
 
     $rootScope.ve_fullDocMode = true;
     if (!$rootScope.veCommentsOn)
@@ -25,7 +26,7 @@ function($scope, $rootScope, $state, $anchorScroll, $location, $timeout, $http, 
     $scope.docLibLink = '';
     $scope.bbApi = {
         init: function() {
-            if (documentOb && documentOb._editable && refOb.type === 'Branch') {
+            if (documentOb && refOb.type === 'Branch' && PermissionsService.hasBranchEditPermission(refOb)) {
                 $scope.bbApi.addButton(UxService.getButtonBarButton('show-edits'));
                 $scope.bbApi.setToggleState('show-edits', $rootScope.ve_editmode);
                 hotkeys.bindTo($scope)

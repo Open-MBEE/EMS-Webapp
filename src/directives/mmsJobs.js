@@ -2,7 +2,7 @@
 
 angular.module('mms.directives')
 .directive('mmsJobs', ['$templateCache', '$http', '$location', '$window', 'growl', '_', '$q', '$rootScope',
-        'AuthService', 'ElementService', 'ProjectService', 'UtilsService', 'JobService', mmsJobs]);
+        'AuthService', 'ElementService', 'ProjectService', 'UtilsService', 'JobService', 'PermissionsService', mmsJobs]);
 /**
  * @ngdoc directive
  * @name mms.directives.directive:mmsJobs
@@ -28,7 +28,7 @@ angular.module('mms.directives')
  * @param {string=null} mmsDocId the id of the current document under which the job is being run
  */
 function mmsJobs($templateCache, $http, $location, $window, growl, _, $q, $rootScope,
-        AuthService, ElementService, ProjectService, UtilsService, JobService) {
+        AuthService, ElementService, ProjectService, UtilsService, PermissionsService, JobService) {
 
     var template = $templateCache.get('mms/templates/mmsJobs.html');
     //:TODO have cases for each null; "running"; "failed"; "completed"; "aborted";"unstable"; "disabled"; "waiting";
@@ -116,7 +116,7 @@ function mmsJobs($templateCache, $http, $location, $window, growl, _, $q, $rootS
                     scope.doc = document;
                     scope.docName = document.name;
                     // Set job run permissions
-                    scope.docEditable = document._editable && scope.mmsRefType != 'Tag';
+                    scope.docEditable = scope.mmsRefType != 'Tag' && PermissionsService.hasBranchEditPermission(refOb);
                     scope.createJobCleared = scope.docEditable;
                     scope.runCleared = scope.docEditable;
                     getJobs();

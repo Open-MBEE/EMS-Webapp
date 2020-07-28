@@ -2,7 +2,7 @@
 
 angular.module('mms.directives')
 .directive('mmsRefList', ['$templateCache', '$http', 'growl', '_', '$q', '$uibModal',
-        'UtilsService', 'JobService', 'ElementService', 'URLService', mmsRefList]);
+        'UtilsService', 'JobService', 'ElementService', 'URLService', 'PermissionsService', mmsRefList]);
 /**
  * @ngdoc directive
  * @name mms.directives.directive:mmsRefList
@@ -23,7 +23,7 @@ angular.module('mms.directives')
  * @param {string=null} mmsDocId the id of the current document
  */
 function mmsRefList($templateCache, $http, growl, _ , $q, $uibModal,
-    UtilsService, JobService, ElementService, URLService) {
+    UtilsService, JobService, ElementService, URLService, PermissionsService) {
 
     var template = $templateCache.get('mms/templates/mmsRefList.html');
 
@@ -122,7 +122,7 @@ function mmsRefList($templateCache, $http, growl, _ , $q, $uibModal,
                 }
                 scope.doc = document;
                 scope.docName = document.name;
-                scope.docEditable = document._editable && scope.mmsRefType != 'Tag';
+                scope.docEditable = scope.mmsRefType != 'Tag' && PermissionsService.hasProjectIdBranchIdEditPermission(scope.mmsProjectId, scope.mmsRefId);
             });
         };
 

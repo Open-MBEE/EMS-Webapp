@@ -79,7 +79,6 @@ describe('ViewService', function() {
 		expect(ViewService.updateViewElements).not.toBe(null);
 		expect(ViewService.createView).not.toBe(null);
 		expect(ViewService.addViewToDocument).not.toBe(null);
-		expect(ViewService.getDocumentViews).not.toBe(null);
 		expect(ViewService.getSiteDocuments).not.toBe(null);
 		expect(ViewService.setCurrentViewId).not.toBe(null);
 		expect(ViewService.setCurrentDocumentId).not.toBe(null);
@@ -149,44 +148,6 @@ describe('ViewService', function() {
 			expect(response[0]).toEqual({author:'muschek', name:'view\'s element', sysmlid:12346, owner:12345, lastModified:'07-28-2014'});
 			expect(response[1]).toEqual({author:'muschek', name:'view\'s 2nd element', sysmlid:12347, owner:12345, lastModified:'07-28-2014'});
 		});
-	}));
-
-	// !-- NOTE: uses old web services API --!
-	// !-- NOTE: also uses a function that requires a site but none is given --!
-	// done, expected to fail
-	it('getDocumentViews', inject(function() {
-		// (!productViews.hasOwnProperty(ver) && * && *), fail
-		ViewService.getDocumentViews('badId', false, 'master', '01-01-2014').then(function(response) {
-			console.log('This should not be displayed');
-		}, function(failMes) {
-			expect(failMes.status).toEqual(200);
-		}); $httpBackend.flush();
-
-		// (!productViews.hasOwnProperty(ver) && * && *), success, !productViews.hasOwnProperty(ver)
-		ViewService.getDocumentViews(54321, false, 'master', '01-01-2014').then(function(response) {
-			expect(response.length).toEqual(1);
-			expect(response[0]).toEqual({author:'muschek', name:'doc view', owner:54321, sysmlid:54322, lastModified:'01-01-2014'});
-		}); $httpBackend.flush();
-
-		// (productViews.hasProperty(ver) && !productViews[ver].hasProperty(id) && *), success
-		// productViews.hasOwnProperty(ver)
-		ViewService.getDocumentViews(65432, false, 'master', 'latest').then(function(response) {
-			expect(response.length).toEqual(1);
-			expect(response[0]).toEqual({author:'muschek', name:'other id view', owner:65432, sysmlid:65433, lastModified:'07-28-2014'});
-		}); $httpBackend.flush();
-
-		// (productViews.hasOwnProperty(ver) && productViews[ver].hasOwnProperty(id) && !update)
-		ViewService.getDocumentViews(54321, false, 'master', '01-01-2014').then(function(response) {
-			expect(response.length).toEqual(1);
-			expect(response[0]).toEqual({author:'muschek', name:'doc view', owner:54321, sysmlid:54322, lastModified:'01-01-2014'});
-		}); $rootScope.$apply();
-
-		// (productViews.hasOwnProperty(ver) && productViews[ver].hasOwnProperty(id) && update)
-		// success, productViews.hasOwnProperty(ver)
-		ViewService.getDocumentViews(54321, true, 'master', 'latest').then(function(response) {
-			expect(response.length).toEqual(1);
-			expect(response[0]).toEqual({author:'muschek', name:'other id view', owner:65432, sysmlid:65433, lastModified:'07-28-2014'});
-		}); $httpBackend.flush();
 	}));
 
 	// done, empty
