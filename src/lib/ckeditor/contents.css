@@ -1,18 +1,19 @@
 /*
-Copyright (c) 2003-2018, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2019, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
 */
 
 body
 {
 	/* Font */
-	font-family: sans-serif, Arial, Verdana, "Trebuchet MS";
-	font-size: 14px;
+	/* Emoji fonts are added to visualise them nicely in Internet Explorer. */
+	font-family: sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+	font-size: 12px;
 
 	/* Text color */
 	color: #333;
 
-	/* Remove the background color to make it transparent */
+	/* Remove the background color to make it transparent. */
 	background-color: #fff;
 
 	margin: 20px;
@@ -20,7 +21,7 @@ body
 
 .cke_editable
 {
-	font-size: 16px;
+	font-size: 13px;
 	line-height: 1.6;
 
 	/* Fix for missing scrollbars with RTL texts. (#10488) */
@@ -37,14 +38,12 @@ blockquote
 	border-width: 0;
 }
 
-/*
 .cke_contents_ltr blockquote
 {
 	padding-left: 20px;
 	padding-right: 8px;
 	border-left-width: 5px;
 }
-*/
 
 .cke_contents_rtl blockquote
 {
@@ -62,14 +61,14 @@ ol,ul,dl
 {
 	/* IE7: reset rtl list margin. (#7334) */
 	*margin-right: 0px;
-	/* preserved spaces for list items with text direction other than the list. (#6249,#8049)*/
+	/* Preserved spaces for list items with text direction different than the list. (#6249,#8049)*/
 	padding: 0 40px;
 }
 
 h1,h2,h3,h4,h5,h6
 {
-	font-weight: 200;
-	line-height: 1.22;
+	font-weight: normal;
+	line-height: 1.2;
 }
 
 hr
@@ -78,19 +77,20 @@ hr
 	border-top: 1px solid #ccc;
 }
 
-/* Align image right */
-span.cke_image_nocaption.image-right,
-div.cke_widget_block.cke_widget_image.image-right{
-	display: block;
-	text-align: right;
+img.right
+{
+	border: 1px solid #ccc;
+	float: right;
+	margin-left: 15px;
+	padding: 5px;
 }
 
-/* Align image center */
-span.cke_image_nocaption.image-center,
-div.cke_widget_block.cke_widget_image.image-center,
-p.image-center {
-	display: block;
-	text-align: center;
+img.left
+{
+	border: 1px solid #ccc;
+	float: left;
+	margin-right: 15px;
+	padding: 5px;
 }
 
 pre
@@ -117,7 +117,7 @@ figure
 	outline: solid 1px #ccc;
 	background: rgba(0,0,0,0.05);
 	padding: 10px;
-	margin: 0;
+	margin: 10px 20px;
 	display: inline-block;
 }
 
@@ -161,7 +161,57 @@ a > img {
 	text-align: right;
 }
 
-.image-grayscale
+.image-grayscale/*
+ * VE Custom CSS
+ */
+
+mms-cf, mms-group-docs, mms-view-link {
+	background-color: #e7f2ff;
+	margin-top: 0;
+	margin-bottom: 0 !important;
+	padding: 2px 2px 1px !important;
+	border: 2px solid #8cbaf1 !important;
+	border-radius: 2px;
+	z-index: 0;
+	cursor: not-allowed;
+}
+
+mms-cf[mms-cf-type="com"] {
+	background-color: #fdfbdc; /*lighten($yellow, 10%);*/
+	border-color: #f8f086 !important; /*darken($yellow, 8%);*/
+}
+
+
+.signature-box {
+	padding: 8px;
+	border: 1px solid #ddd;
+}
+
+a[title='mms-br']:hover {
+	background-color: transparent;
+	cursor: default;
+}
+a[title='mms-br'] {
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+}
+a[title='mms-br'] > hr {
+	margin: 0;
+}
+
+.cke_panel_listItem.cke_selected a, .cke_panel_listItem a:hover, .cke_panel_listItem a:focus, .cke_panel_listItem a:active {
+	background-color: #f5f5f5 !important;
+	outline: 0;
+}
+
+.cke_panel_listItem a {
+	padding-left: 20px !important;
+}
+
+.inlineCode {
+	background-color: #e8d4e8;
+	color: black;
+}
 {
 	background-color: white;
 	color: #666;
@@ -229,8 +279,8 @@ mms-cf[mms-cf-type="com"] {
 
 
 .signature-box {
-	 padding: 8px;
-	 border: 1px solid #ddd;
+	padding: 8px;
+	border: 1px solid #ddd;
 }
 
 a[title='mms-br']:hover {

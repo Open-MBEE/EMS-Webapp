@@ -1,0 +1,177 @@
+
+<div class="mms-search">
+    <div class="search-header" ng-class="{searchresults : searchResults}">
+        <div class="mms-search-input" ng-hide="advanceSearch || advancedSearchResults">
+            <form class="form-inline basic-search-form" ng-submit="newSearch(mainSearch)">
+                <!-- search type menu -->
+                <div class="form-group fixed-content-m">
+                    <label class="sr-only" for="searchTypeSelect">Search type menu</label>
+                    <div class="btn-group ve-light-dropdown" uib-dropdown keyboard-nav is-open="mainSearchType.isopen">
+                        <button id="searchTypeSelect" class="dropdown-toggle" type="button" uib-dropdown-toggle>
+                            {{mainSearch.searchType.label}}&nbsp;<i class="fa fa-caret-down" aria-hidden="true"></i>
+                        </button>
+                        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="searchTypeSelect">
+                            <li ng-click="mainSearch.searchType = type;" ng-repeat="type in fieldTypeList"
+                                ng-class="{'checked-list-item': type.id === mainSearch.searchType.id}">
+                                <a>{{ type.label }}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- search keyword input -->
+                <div class="form-group" ng-show="mainSearch.searchType.id != 'metatype'">
+                    <label class="sr-only" for="searchInput">Search keyword</label>
+                    <input class="search-input" type="text" id="searchInput" ng-model="mainSearch.searchText" autofocus/>
+                </div>
+                <div class="form-group" ng-if="mainSearch.searchType.id === 'metatype'">
+                    <label class="sr-only" for="searchMetatypeSelect">Search metatype menu</label>
+                    <div id="searchMetatypeSelect" ng-dropdown-multiselect="" options="metatypeList" selected-model="mainSearch.selectedSearchMetatypes" extra-settings="metatypeSettings"></div>
+                </div>
+                <button class="btn btn-primary" type="button" ng-click="newSearch(mainSearch)">
+                    <span class="btn-text">Search</span> <i ng-if="searchLoading" class="fa fa-spin fa-spinner"></i>
+                </button>
+            </form>
+            <div>
+                <input type="checkbox" ng-model="docsviews.selected"> Search for Views and Documents
+                <a class="pull-right" ng-click="advanceSearch = !advanceSearch">Advanced Search</a>
+            </div>
+        </div>
+
+        <div class="mms-search-input" ng-show="advanceSearch">
+            <div class="misc-form-field search-nav-back">
+                <a ng-click="advanceSearch = !advanceSearch"><i class="fa fa-arrow-left"></i>Basic Search</a>
+            </div>
+            <!-- submit change -->
+            <form class="form-inline advanced-query" ng-submit="newSearch(mainSearch)">
+                <!-- advanced search query input disabled -->
+                <h3 class="fixed-content-m">Advanced Search</h3>
+                <div class="form-group">
+                    <label class="sr-only" for="searchQuery">Advanced search query (disabled)</label>
+                    <input class="search-input disabled-input" type="text" id="searchQuery" ng-model="stringQuery" disabled />
+                </div>
+                <button class="btn btn-primary" type="button" ng-click="newSearch(mainSearch)">
+                    <span class="btn-text">Search</span> <i ng-if="searchLoading" class="fa fa-spin fa-spinner"></i>
+                </button>
+            </form>
+
+            <div class="form-inline" style="justify-content: flex-end">
+                <div class="form-group fixed-content-s">
+                </div>
+                <!-- search type menu -->
+                <div class="form-group fixed-content-m">
+                    <label class="sr-only" for="searchTypeSelectAdvance">Search type menu</label>
+                    <div class="btn-group ve-light-dropdown" uib-dropdown keyboard-nav is-open="mainSearchType.isopen2">
+                        <button id="searchTypeSelectAdvance" class="dropdown-toggle" type="button" uib-dropdown-toggle>
+                            {{mainSearch.searchType.label}}&nbsp;<i class="fa fa-caret-down" aria-hidden="true"></i>
+                        </button>
+                        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="searchTypeSelectAdvance">
+                            <li ng-click="mainSearch.searchType = type; stringQueryUpdate()" ng-repeat="type in fieldTypeList"
+                                ng-class="{'checked-list-item': type.id === mainSearch.searchType.id}">
+                                <a>{{ type.label }}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- search keyword input -->
+                <div class="form-group" ng-show="mainSearch.searchType.id != 'metatype'">
+                    <label class="sr-only" for="searchText">Advanced search query</label>
+                    <input class="search-input" type="text" id="searchText" ng-model="mainSearch.searchText" ng-change="stringQueryUpdate()" autofocus/>
+                </div>
+                <!-- metatype multiselect -->
+                <div class="form-group" ng-if="mainSearch.searchType.id === 'metatype'">
+                    <label class="sr-only" for="searchMetatypeSelectAdvance">Search metatype menu</label>
+                    <div id="searchMetatypeSelectAdvance" ng-dropdown-multiselect="" options="metatypeList" selected-model="mainSearch.selectedSearchMetatypes" extra-settings="metatypeSettings" events="multiselectEvent"></div>
+                </div>
+            </div>
+
+            <!-- Advanced search rows -->
+            <div ng-repeat="row in advanceSearchRows">
+                <div class="form-inline">
+                    <!-- operator -->
+                    <div class="form-group fixed-content-s">
+                        <label class="sr-only" for="operator-{{$index}}">Search row operator</label>
+                        <div class="btn-group ve-light-dropdown" uib-dropdown keyboard-nav is-open="row.operatorisopen">
+                            <button id="operator-{{$index}}" class="dropdown-toggle" type="button" uib-dropdown-toggle>
+                                {{row.operator}}&nbsp;<i class="fa fa-caret-down" aria-hidden="true"></i>
+                            </button>
+                            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="operator-{{$index}}">
+                                <li ng-click="row.operator = value; stringQueryUpdate()" ng-repeat="(key, value) in operatorList"
+                                    ng-class="{'checked-list-item': value === row.operator}">
+                                    <a>{{ value }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- row search type menu -->
+                    <div class="form-group fixed-content-m">
+                        <label class="sr-only" for="searchTypeSelect-{{$index}}">Search type menu</label>
+                        <div class="btn-group ve-light-dropdown" uib-dropdown keyboard-nav is-open="row.isopen">
+                            <button id="searchTypeSelect-{{$index}}" class="dropdown-toggle" type="button" uib-dropdown-toggle>
+                                {{row.searchType.label}}&nbsp;<i class="fa fa-caret-down" aria-hidden="true"></i>
+                            </button>
+                            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="searchTypeSelect-{{$index}}">
+                                <li ng-click="row.searchType = type; stringQueryUpdate()" ng-repeat="type in fieldTypeList"
+                                    ng-class="{'checked-list-item': type.id === row.searchType.id}">
+                                    <a>{{ type.label }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- row search keyword input -->
+                    <div class="form-group" ng-show="row.searchType.id != 'metatype'">
+                        <label class="sr-only" for="searchText-{{$index}}">Advanced search query</label>
+                        <input class="search-input" type="text" id="searchText-{{$index}}" ng-model="row.searchText" ng-change="stringQueryUpdate()" autofocus/>
+                    </div>
+                    <!-- row metatype multiselect -->
+                    <div class="form-group" ng-if="row.searchType.id === 'metatype'">
+                        <label class="sr-only" for="searchMetatypeSelect-{{$index}}">Search metatype menu</label>
+                        <div id="searchMetatypeSelect-{{$index}}" ng-dropdown-multiselect="" options="metatypeList" selected-model="row.selectedSearchMetatypes" extra-settings="metatypeSettings" events="multiselectEvent"></div>
+                    </div>
+                    <!-- remove row button -->
+                    <a type="button" ng-click="removeRowAdvanceSearch(row)" class="btn btn-secondary">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- add row button -->
+            <a type="button" ng-click="addAdvanceSearchRow()" class="btn btn-secondary">
+                <i class="fa fa-plus"></i>&nbsp;Add Row
+            </a>
+            <div class="advanced-views-docs">
+                <input type="checkbox" ng-model="docsviews.selected"> Search for Views and Documents
+            </div>
+        </div>
+        <span class="close-button-container">
+            <span class="close-button" ng-if="mmsOptions.closeable" ng-click="closeSearch()">
+                <i tooltip-placement="left" uib-tooltip="Close Search"  class="fa fa-times"></i>
+            </span>
+        </span>
+
+        <!-- <div ng-show="advancedSearchResults" class="mms-search-input"> -->
+            <!-- advanced search query input disabled -->
+            <!-- <div class="form-group">
+                <div class="misc-form-field search-nav-back">
+                    <a ng-click="advancedSearchResults = !advancedSearchResults"><i class="fa fa-arrow-left"></i>Basic Search</a>
+                </div>
+                <form class="form-inline" ng-submit="newSearch(mainSearch)"> -->
+                    <!-- advanced search query input disabled -->
+                    <!-- <h3 class="fixed-content-m">Advanced Search</h3>
+                    <label class="sr-only" for="searchText">Advanced search query (disabled)</label>
+                    <span ng-click="modifyAdvanceSearch()" class="search-input disabled-input-container">
+                        <input class="search-input disabled-input form-group" type="text" id="searchText" ng-model="stringQuery" disabled />
+                    </span>
+                    <a ng-click="modifyAdvanceSearch()">Modify</a>
+                </form>
+            </div>
+        </div> -->
+    </div>
+    <div class="slide-animate" ng-include="'partials/mms-directives/mmsSearchResults.html'"></div>
+    <div class="container-fluid search-nav">
+        <a ng-show="currentPage > 0" ng-click="prevPage()">&lt; Prev</a>
+        <a ng-show="searchResults.length > 0 && currentPage < maxPages" class="pull-right" ng-click="nextPage()">Next ></a>
+    </div>
+
+    <div class="container-no-results container-fluid" ng-show="searchResults.length === 0 && !searchLoading">
+        <h3>No Results Found.</h3>
+    </div>
+</div>

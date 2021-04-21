@@ -1,0 +1,27 @@
+<div id="ve-login" class="row">
+    <div class="account-wall">
+        <div>
+            <img src="assets/logo-large.svg" alt="Program Logo">
+        </div>
+        <div>
+            <form name="loginForm" ng-submit="login(credentials)">
+                <span class="label-text">Username:</span>
+                <input type="text" class="form-control login-input" ng-model="credentials.username" autofocus>
+                <span class="label-text">Password:</span>
+                <input type="password" class="form-control login-input" ng-model="credentials.password">
+                <button class="btn btn-block btn-primary" type="submit">Log In
+                    <span ng-if="spin" ><i class="fa fa-spin fa-spinner"></i></span>
+                </button>
+            </form>
+        </div>
+
+        <div class="login-banner">
+            <div class="login-box login-banner">
+                <ul>
+                    <li ng-repeat="label in loginBanner">{{label}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+

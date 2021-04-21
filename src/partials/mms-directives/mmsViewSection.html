@@ -1,0 +1,23 @@
+<div ng-if="section.specification">
+    <div ng-show="! isEditing">
+        <h1 class="section-title h{{level}}" ng-hide="inPreviewMode">{{section._veNumber}} {{section.name}}</h1>
+        <div ng-show="inPreviewMode"><h1 class="section-title h{{level}}">{{section._veNumber}} {{edit.name}}</h1></div>
+    </div>
+    <div ng-class="{'panel panel-default' : isEditing}">
+        <div ng-class="{'no-display' : ! isEditing}" class="panel-heading clearfix no-print">
+            <h3 class="panel-title pull-left">
+                <div ng-class="{prop: isEditing}"><input class="form-control" type="text" ng-model="edit.name"/></div>
+            </h3>
+            <div class="btn-group pull-right">
+                <button-bar-component class="transclude-panel-toolbar" buttons="buttons" mms-bb-api="bbApi"></button-bar-component>
+            </div>
+        </div>
+        <div ng-class="{'panel-body' : isEditing}">
+            <div class="add-pe-button-container no-print" ng-init="$index = -1" ng-include="'partials/mms-directives/mmsAddPeButton.html'"></div>
+            <div ng-repeat="instanceVal in section.specification.operand track by instanceVal.instanceId">
+                <mms-view-presentation-elem data-mms-instance-val="::instanceVal" data-mms-parent-section="::section"></mms-view-presentation-elem>
+                <div class="add-pe-button-container no-print" ng-include="'partials/mms-directives/mmsAddPeButton.html'"></div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+<header role="banner">
+  <div class="block">
+    <div class="banner-title">{{title}}</div>
+    <a ng-click="nav.toggleNav()" class="nav-btn"><i class="fa fa-lg fa-bars"></i></a>
+  </div>
+</header>
+
+<nav class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
+  <div class="block">
+
+    <ul>
+      <ul class="nav-btns-main">
+          <li ng-click="goBack()"><a><span class="label label-danger">&#8701; CANCEL</span></a></li>
+      <li> Comparing from <strong>{{sourceName}}</strong> to <strong>{{targetName}}</strong> </li> 
+      </ul>
+
+
+      <!-- Dashboard, Support, Feedback, and Logout buttons -->
+      <!-- <ul class="nav-btns-main pull-right">
+        <li ng-show="site && site.sysmlId !== 'no-site'">
+          <a class="nav-btn" tooltip="Dashboard" tooltip-trigger="mouseenter" tooltip-popup-delay="600" tooltip-placement="bottom" href="/share/page/site/{{site.sysmlId}}/dashboard" target="_blank"><i class="fa fa-dashboard"></i></a>
+        </li>
+
+        <li>
+          <a class="nav-btn support-btn" tooltip="Support" tooltip-trigger="mouseenter" tooltip-popup-delay="600" tooltip-placement="bottom" href="https://ems.jpl.nasa.gov/alfresco/mmsapp/mms.html#/workspaces/master/sites/site__17_0_5_1_8660276_1410291055211_913229_25118" target="_blank"><i class="fa fa-question-circle"></i></a>
+        </li>
+
+        <li>
+          <a class="nav-btn portal-btn" tooltip="Feedback" tooltip-trigger="mouseenter" tooltip-popup-delay="600" tooltip-placement="bottom" href="https://ems.jpl.nasa.gov/share/page/site/ems-support/discussions-topiclist" target="_blank"><i class="fa fa-comments"></i></a>
+        </li>
+
+        <li>
+          <a class="nav-btn logout-btn" tooltip="Logout" tooltip-trigger="mouseenter" tooltip-popup-delay="600" tooltip-placement="bottom" href="/alfresco/service/logout/info?next=/alfresco/mmsapp/mms.html"><i class="fa fa-sign-out"></i></a>
+        </li>
+
+      </ul> -->
+
+      <ul class="nav-btns-flyover pull-right">
+        <li ng-show="site && site.sysmlId !== 'no-site' && ws" class="out-link">
+          <a ui-sref="workspace.site({site: site.sysmlId})">DocWeb</a>
+        </li>
+        
+        <li ng-show="ws" class="out-link">
+          <a ui-sref="workspace.sites()">Site Portal</a>
+        </li>
+        
+        <li class="out-link">
+          <a ui-sref="workspace({workspace:'master'})">Model Manager</a>
+        </li>
+
+        <li ng-show="site && site.sysmlId !== 'no-site'" class="out-link">
+          <a href="/share/page/site/{{site.sysmlId}}/dashboard">Dashboard</a>
+        </li>
+
+        <li class="out-link">
+          <!-- TODO (jk) - Branding -->
+          <a href="https://github.com/open-mbee/ve" target="_blank">Support</a>
+        </li>
+
+        <li class="out-link">
+          <!-- TODO (jk) - Branding -->
+          <a href="https://github.com/open-mbee/enhancement-proposals" target="_blank">Feedback</a>
+        </li>
+
+        <li class="out-link">
+          <a href="/alfresco/service/logout/info?next=/">Logout</a>
+        </li>
+
+      </ul>
+
+    </ul>
+
+  </div>
+</nav>
+
+
+

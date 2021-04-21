@@ -1,0 +1,34 @@
+<div id="{{mmsElementId}}" ng-class="{landscape: view._printLandscape}">
+
+    <h1 ng-if="mmsLink" class="view-title">
+      <span class="ve-view-number">{{view._veNumber}}</span> <mms-view-link ng-class="{'docTitle-underlined': isHover}" mms-element-id="{{view.id}}" mms-doc-id="{{view.id}}"></mms-view-link>
+      <mms-view-link class="open-document" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()" mms-element-id="{{view.id}}" mms-doc-id="{{view.id}}" 
+        link-text="Open Document" link-class="btn btn-primary no-print" mms-external-link="true" link-icon-class="fa fa-share"></mms-view-link>
+    </h1>
+
+    <h1 ng-if="!mmsLink" class="view-title h{{level}}">
+        <span class="ve-view-number">{{view._veNumber}}</span> <mms-transclude-name mms-element-id="{{view.id}}" mms-project-id="{{view._projectId}}" mms-ref-id="{{view._refId}}"></mms-transclude-name>
+    </h1>
+
+    <div class="ve-secondary-text last-modified no-print">
+      Last Modified: {{modified | date:'M/d/yy h:mm a'}} by <b>{{ modifier.email }}</b>
+    </div>
+
+    <i ng-hide="view" class="fa fa-2x fa-spinner fa-spin"></i>
+
+    <div class="add-pe-button-container no-print" ng-init="$index = -1" ng-include="'partials/mms-directives/mmsAddPeButton.html'"></div>
+    <div ng-if="view._contents">
+        <!-- Cant use track by instanceVal.instance b/c of possible duplicate entries -->
+        <div ng-repeat="instanceVal in view._contents.operand track by instanceVal.instanceId"> 
+            <mms-view-presentation-elem data-mms-instance-val="::instanceVal"></mms-view-presentation-elem>
+            <div class="add-pe-button-container no-print" ng-include="'partials/mms-directives/mmsAddPeButton.html'"></div>
+        </div>
+    </div>
+    <div ng-if="view.specification">
+        <!-- Cant use track by instanceVal.instance b/c of possible duplicate entries -->
+        <div ng-repeat="instanceVal in view.specification.operand track by instanceVal.instanceId"> 
+            <mms-view-presentation-elem data-mms-instance-val="::instanceVal"></mms-view-presentation-elem>
+            <div class="add-pe-button-container no-print" ng-include="'partials/mms-directives/mmsAddPeButton.html'"></div>
+        </div>
+    </div>
+</div>

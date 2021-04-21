@@ -1,4 +1,4 @@
-'use strict';
+
 
 angular.module('mms').filter('underlineMatch', ['$filter', partialMatch]);
 function partialMatch($filter) {

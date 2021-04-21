@@ -1,0 +1,84 @@
+<div id="ve-origin-select" class="row">
+    <div class="account-wall-lg" ng-if="redirect_from_old_site">
+        <h2>This is not a valid link</h2>
+        <div class="flex">
+            <div class="two-thirds-flex">
+                <h4>Please navigate to your document by selecting the corresponding organization and project to continue.</h4>
+            </div>
+            <div class="one-third-flex">
+                <form name="loginForm" ng-submit="continue()">
+                    <div class="btn-group ve-dark-dropdown-wide" uib-dropdown>
+                        <span class="label-dropdown">Org:</span>
+                        <button type="button" class="dropdown-toggle" uib-dropdown-toggle>
+                            <span>{{ selectedOrg }}<i class="fa fa-caret-down" aria-hidden="true"></i></span>
+                        </button>
+                        <ul class="dropdown-menu list-with-selected-item" uib-dropdown-menu role="menu">
+                            <li ng-model="selectedOrg" ng-repeat="org in orgs | orderBy: 'name'" ng-click="selectOrg(org)"
+                            ng-class="{'checked-list-item': org.name === selectedOrg}">{{ org.name }}</li>
+                        </ul>
+                    </div>
+                    <div class="btn-group ve-dark-dropdown-wide" uib-dropdown>
+                        <span class="label-dropdown">Project:</span>
+                        <button type="button" class="dropdown-toggle" uib-dropdown-toggle ng-disabled="!selectedOrg || !projects.length">
+                            <span ng-hide="projects.length || !selectedOrg">No Projects for selected Org</span>
+                            <span ng-show="projects.length">{{ selectedProject }}<i class="fa fa-caret-down" aria-hidden="true"></i></span>
+                        </button>
+                        <ul class="dropdown-menu list-with-selected-item" uib-dropdown-menu role="menu">
+                            <li ng-model="selectedProject" ng-repeat="project in projects | orderBy: 'name'"
+                                ng-class="{'checked-list-item': project.name === selectedProject}"
+                                ng-click="selectProject(project)">{{ project.name }}
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-block btn-primary" type="submit"  ng-disabled="!selectedProject || !selectedOrg">Continue
+                        <span ng-if="spin"><i class="fa fa-spin fa-spinner"></i></span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="account-wall" ng-if="!redirect_from_old_site">
+        <div ng-class="{'fade-in': fromLogin}">
+            <a class="select-logout-button" ng-click="logout()"><i class="fa fa-arrow-left back-to-account" aria-hidden="true"></i></a>
+            <img src="assets/logo-large.svg" alt="Program Logo">
+        </div>
+        <div ng-class="{'animated-fade-in-slide': fromLogin}">
+            <form name="loginForm" ng-submit="continue()">
+                <div class="btn-group ve-dark-dropdown-wide" uib-dropdown>
+                    <span class="label-dropdown">Org:</span>
+                    <button type="button" class="dropdown-toggle" uib-dropdown-toggle>
+                        <span>{{ selectedOrg }}<i class="fa fa-caret-down" aria-hidden="true"></i></span>
+                    </button>
+                    <ul class="dropdown-menu list-with-selected-item" uib-dropdown-menu role="menu">
+                        <li ng-model="selectedOrg" ng-repeat="org in orgs | orderBy: 'name'" ng-click="selectOrg(org)"
+                        ng-class="{'checked-list-item': org.name === selectedOrg}">{{ org.name }}</li>
+                    </ul>
+                </div>
+                <div class="btn-group ve-dark-dropdown-wide" uib-dropdown>
+                    <span class="label-dropdown">Project:</span>
+                    <button type="button" class="dropdown-toggle" uib-dropdown-toggle ng-disabled="!selectedOrg || !projects.length">
+                        <span ng-hide="projects.length || !selectedOrg">No Projects for selected Org</span>
+                        <span ng-show="projects.length">{{ selectedProject }}<i class="fa fa-caret-down" aria-hidden="true"></i></span>
+                    </button>
+                    <ul class="dropdown-menu list-with-selected-item" uib-dropdown-menu role="menu">
+                        <li ng-model="selectedProject" ng-repeat="project in projects | orderBy: 'name'"
+                            ng-class="{'checked-list-item': project.name === selectedProject}"
+                            ng-click="selectProject(project)">{{ project.name }}
+                        </li>
+                    </ul>
+                </div>
+                <button class="btn btn-block btn-primary" type="submit" ng-disabled="!selectedProject || !selectedOrg">Continue
+                    <span ng-if="spin"><i class="fa fa-spin fa-spinner"></i></span>
+                </button>
+            </form>
+        </div>
+
+        <div class="login-banner">
+            <div class="login-box login-banner">
+                <ul>
+                    <li ng-repeat="label in loginBanner">{{label}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

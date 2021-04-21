@@ -1,0 +1,281 @@
+
+/*------------------------------------------------------------------
+[VE No Panes Tabls of Contents]
+
+1. General
+  1.1 Typography/Layout
+2. Panels
+  2.1 Tabs (not using any more)
+  2.2 List
+    2.2.1 Layout
+    2.2.2 General List Items
+    2.2.3 Headers 
+  2.3 Detail View
+    2.3.1 Info table
+    2.3.1 Header
+    2.3.2.1 Buttons
+  2.4 Responsive
+
+-------------------------------------------------------------------*/
+
+
+/*------------------------------------------------------------------
+  1.1 General Typography/Layout
+-------------------------------------------------------------------*/
+
+.ve-no-panes {
+
+  margin-top: 90px;
+  overflow: auto;
+  height: 90vh;
+
+  a {
+    color: #333;
+  }
+
+  .back-to-docs:before{
+    content:"\f060";
+    font-family: "FontAwesome";
+    padding-right:4px;
+  }
+
+  .back-to-docs{
+    color:$ve-link;
+    font-weight: 500;
+    font-size: 16px;
+  }
+
+  h1 {
+    font-size: 36px;
+    margin: 6px 0 40px;
+  }
+
+  h3 {
+    font-size: 24px;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .panel-default {
+    border-color: $ve-silver-darker-1;
+  }
+
+  .nav-tabs{
+    border-color: $ve-silver-darker-1;
+  }
+}
+
+
+/*------------------------------------------------------------------
+2. Panels
+-------------------------------------------------------------------*/
+
+
+.ve-light-list-panels {
+  padding: 0;
+}
+
+/*------------------------------------------------------------------
+  2.2 List
+-------------------------------------------------------------------*/
+
+ul.ve-light-list {
+
+/*------------------------------------------------------------------
+    2.2.1 Layout
+-------------------------------------------------------------------*/
+
+  /* Layout and color for left hand list */
+  padding-left: 0;
+  list-style: none;
+  max-height: 300px;
+  overflow-y: auto;
+  width: 100%;
+  background-color: $ve-silver-lighter-1;
+  border-right: 1px solid $ve-silver-darker-1;
+  margin-bottom: 0;
+
+/*------------------------------------------------------------------
+    2.2.2 General List Items
+-------------------------------------------------------------------*/
+
+  li {
+    padding: 6px 10px 6px 28px;
+    font-size: 16px;
+    cursor: pointer;
+    @include transition($background_easeout_transition);
+  }
+
+  li.ref-item:hover {
+    background: $ve-silver-lighter-0;
+  }
+
+  li a,
+  li a:hover,
+  li a:visited {
+    color: #333;
+    text-decoration:none;
+  }
+
+  li.selected {
+    background-color: $ve-silver-darker-1;
+
+    a {
+      font-weight: 600;
+    }
+  }
+
+  li.selected:hover{
+    background-color: $ve-silver-darker-1;
+  }
+
+  /*Indicates progress*/
+  a.ref-duplicating::after{
+    content:"(In Progress)";
+    font-style:italic;
+    font-weight:400;
+    padding-left:6px;
+  }
+
+  li.ve-light-input{
+    padding:10px 0;
+  }
+
+/*------------------------------------------------------------------
+    2.2.3 Headers (reference titles)
+-------------------------------------------------------------------*/
+
+  .ref-title h2{
+    margin: 4px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: .14em;
+    font-size: 12px;
+    color: $ve-light-text;
+  }
+
+  .ref-title h2 .fa{
+    padding-right:4px;
+  }
+
+  li.ref-title{
+    padding: 8px 10px; 
+  }
+
+  li.ref-title ~ li.ref-title{
+    margin-top:16px;
+  }
+  
+}
+
+/*------------------------------------------------------------------
+  2.4 Responsive
+-------------------------------------------------------------------*/
+
+/* When mobile, move list to top of detail view*/
+
+@media (min-width: 990px) {
+  ul.ve-light-list {
+    height: calc(100vh - 300px);
+    max-height: none;
+  }
+
+  .ve-light-panels-detail {
+    height: calc(100vh - 300px);
+    overflow-y:auto;
+    padding:0;
+  }
+}
+
+@media (max-height: 500px) {
+  ul.ve-light-list {
+    height: 300px;
+  }
+
+  .ve-light-panels-detail {
+    height: 300px;
+  }
+}
+
+/*------------------------------------------------------------------
+  2.3 Detail View
+-------------------------------------------------------------------*/
+
+.ve-light-panels-detail {
+
+/*------------------------------------------------------------------
+    2.3.1 Info Table
+-------------------------------------------------------------------*/
+
+  .ve-light-panels-detail-content{
+    padding: 10px 26px 20px;
+
+    dd,
+    dt {
+      padding: 2px 0;
+      font-size: 16px;
+    }
+
+    dd.link-section {
+      padding-bottom: 24px;
+    }
+
+    dd.link-section > a, dd.link-section > span {
+      color: $ve-link;
+      font-weight: 500;
+    }
+
+    dd.link-section > a::after {
+      content:"\f061";
+      font-family: FontAwesome;
+      padding-left:4px;
+    }
+  }
+
+/*------------------------------------------------------------------
+    2.3.2 Header
+-------------------------------------------------------------------*/
+
+/* Header with create branches and tags to the right */
+
+  .panels-detail-title {
+    border-bottom: 1px solid $ve-silver-darker-1;
+    margin-bottom: 20px;
+    padding: 18px 26px 20px;
+
+    h3 {
+      display: inline-block;
+    }
+
+    button-bar-component {
+      float: right;
+    }
+  }
+
+/*------------------------------------------------------------------
+      2.3.2.1 Buttons
+-------------------------------------------------------------------*/
+
+/* Styling for when branches are disabled.*/
+
+  span.branch-disabled::before{
+    font-family:FontAwesome;
+    content: "\2026";
+    top: -4px;
+    color: #d8d8d8;
+    padding-right: 4px;
+    text-decoration: none;
+    font-size: 24px;
+    position: relative;
+  }
+
+  dd.link-section > span.branch-disabled{
+    color:$ve-light-text;
+  }
+
+  dd.link-section > span.branch-disabled:hover{
+    text-decoration:none;
+  }
+
+}
+

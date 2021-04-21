@@ -1,8 +1,8 @@
 ################################################################################
 # Dockerfile
 # 
-# Josh Kaplan 
-# joshua.d.kaplan@lmco.com
+# Enquier
+# openmbee@gmail.com
 #
 # This is the Dockerfile for View Editor (VE). 
 # To build the container, run the following command: `docker build -t ve .` 
@@ -10,8 +10,6 @@
 #
 ################################################################################
 FROM node:8
-
-MAINTAINER Josh Kaplan <joshua.d.kaplan@lmco.com>
 
 WORKDIR /opt/mbee/ve
 COPY . /opt/mbee/ve

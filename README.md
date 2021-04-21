@@ -164,7 +164,7 @@ Put core [Directives](https://docs.angularjs.org/guide/directive "Angular Docume
         
         'use strict';
         
-        angular.module('mms.directives')
+        angular.module('mmsDirectives')
         .directive('mmsElementName', ['ElementService', mmsElementName]);
         
         function mmsElementName(ElementService) {

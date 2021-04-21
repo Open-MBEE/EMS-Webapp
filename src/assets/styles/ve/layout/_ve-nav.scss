@@ -1,0 +1,391 @@
+
+/*------------------------------------------------------------------
+[Navigation Table of Contents]
+
+1. General
+  1.1 Typography/Layout
+2. Org/global Level Header
+  2.1 Org Navigation
+  2.2 Global Navigation
+    2.2.1 Menu
+    2.2.2 Search
+  2.3 User Profile
+3. Project Level Header
+  3.1 Breadcrumbs
+  3.2 Dropdowns
+
+-------------------------------------------------------------------*/
+
+
+/*------------------------------------------------------------------
+  1.1 General Typography/Layout
+-------------------------------------------------------------------*/
+
+.navbar {
+  color: white;
+  margin: 0;
+  letter-spacing: .05em;
+  font-size: 14px;
+  z-index: 200;
+  // position: relative;
+  width: 100%;
+  height: $navHeight;
+  top: $navBanner;
+  min-height: 30px;
+  border: 0;
+  background-color: $ve-slate-base;
+
+  a,
+  a:hover,
+  a:visited {
+    text-decoration: none;
+    color: white;
+  }
+}
+
+/*------------------------------------------------------------------
+2. Org/Global Level Header
+-------------------------------------------------------------------*/
+
+nav.global-header {
+  background-color: $ve-slate-base;
+}
+
+/*------------------------------------------------------------------
+  2.1 Org Navigation
+-------------------------------------------------------------------*/
+
+a.switch-org,
+a.switch-org:hover {
+  font-size: 11px;
+  text-decoration: underline !important;
+}
+
+/* View Editor logo placement*/
+.navbar-brand{
+  float: left;
+  padding: 5px 7px;
+  font-size: 20px;
+  line-height: 22px;
+  height: $navHeight;
+
+  img{
+    height: 26px;
+    //border-radius: 50%;
+    @include transition($background_hover_transition);
+
+    &:hover{
+      background-color: #0096FF;
+    }
+  }
+}
+
+.org-title {
+  font-weight: 600;
+  padding-right: 4px;
+  line-height: $navHeight;
+}
+
+/*------------------------------------------------------------------
+  2.2 Global Navigation
+-------------------------------------------------------------------*/
+
+#global-navigation {
+  background-color: $ve-slate-base;
+  border: none;
+  float: right;
+}
+
+.navbar-collapse.in {
+  width: 100%;
+}
+
+.main-nav-toggle {
+  margin: 4px 12px;
+  padding: 3px 8px;
+}
+
+/*------------------------------------------------------------------
+    2.2.1 Menu
+-------------------------------------------------------------------*/
+
+ul.global-menu {
+  padding: 0 10px;
+  min-height: 30px;
+  color: white;
+  min-height: 30px;
+  background-color: $ve-slate-base;
+}
+
+.global-menu > li {
+  margin: 6px 12px;
+  height: 24px;
+  line-height: 24px;
+
+  /* Lighten top level nav to recede it*/
+  span a,
+  span a:visited,
+  span > a{
+    color: $ve-white-text-lighter-2;
+    background-color: transparent;
+  }
+
+  .dropdown-menu > li > a{
+    color: $white;
+  }
+
+  span a:hover,
+  span > a:hover {
+    color: white;
+  }
+}
+
+.open>a, .nav .open>a:focus, .nav .open>a:hover {
+  background-color: transparent;
+  border: none;
+}
+
+/*------------------------------------------------------------------
+    2.2.2 Search
+-------------------------------------------------------------------*/
+
+#global-search {
+  // display: inline;
+  // position: relative;
+  margin: 0;
+
+  input {
+    background-color: $ve-slate-darker-2;
+    border: 1px solid $ve-slate-darker-2;
+    border-radius: 3px 0 0 3px;
+    width: 300px;
+    padding: 0 8px;
+    height: 26px;
+    margin: 5px 0;
+    letter-spacing: .05em;
+    line-height: 1;
+    &:focus {
+      outline: none;
+      background-color: $ve-slate-darker-3;
+      border: 1px solid $ve-teal-base;
+    }
+  }
+
+  button {
+    border-radius: 0 3px 3px 0;
+    height: 26px;
+    padding: 0px 7px;
+    background-color: $ve-teal-base;
+    top: 0px;
+    position: relative;
+    box-sizing: border-box;
+    color: white;
+    border:none;
+    margin: 5px 0 5px -10px;
+    vertical-align: bottom;
+  }
+
+  button .fa-search {
+    position: relative;
+    color: white;
+    font-size:14px;
+    top:-1px;
+  }
+
+  button:hover {
+    background-color:$ve-teal-darker-1;
+  }
+}
+@media (max-width: 720px) {
+  #global-search input {
+    width: calc(100% - 30px);
+  }
+}
+
+/*------------------------------------------------------------------
+  2.3 user Profile
+-------------------------------------------------------------------*/
+
+#login-dropdown {
+  display: inline-block;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  background:$ve-accent;
+  text-align: center;
+  color:white;
+
+  &:hover {
+    background-color:$ve-accent-darker;
+  }
+}
+
+
+/*------------------------------------------------------------------
+3. Project Level Header
+-------------------------------------------------------------------*/
+
+nav.project-level-header {
+  background-color: $ve-slate-darker-2;
+  top: $navProject;
+  z-index: 150;
+
+  .navbar-nav {
+    margin: 0;
+  }
+}
+
+/*------------------------------------------------------------------
+  3.1 Breadcrumbs
+-------------------------------------------------------------------*/
+
+.navbar{
+  .breadcrumbs {
+    display: inline-block;
+
+    ul {
+      list-style: none;
+      display: inline-block;
+      margin: 0;
+      padding-left: 10px;
+      position: relative;
+    }
+
+    li {
+      display: inline;
+      line-height: $navHeight;
+
+      a{
+        padding: 0 7px 0 5px;
+        max-width: 100%;
+
+        /*Hover state over links to show it's clickable*/
+        &:hover{
+          text-decoration: underline;
+        }
+      }
+    }
+
+    /*adjust folder and file icons for nav */
+    .fa-folder,
+    .fa-file {
+      font-size: 12px;
+      padding: 6px 4px 6px 0;
+      top: -.1em;
+      position: relative;
+    }
+
+    .back-to-proj{
+      font-size: 1.2em;
+      top: .05em;
+      position: relative;
+    }
+  }
+}
+
+
+/*Hide breadcrumbs for mobile*/
+@media (max-width: 1000px){
+  .breadcrumbs {
+    li {
+      a, span{
+        display: none;
+      }
+    }
+
+    /* Keep home visible*/
+    li:first-child{
+      a{
+        display: inline-block;
+      }
+    }
+  }
+
+  .project-level-header{
+    .navbar-right{
+      float: right;
+    }
+  }
+}
+
+/*Hide all but the last 2 breadcrumbs */
+@media (max-width: 1000px) and (min-width: 700px){
+  .breadcrumbs{
+    li:nth-last-child(-n+2) {
+      a, span{
+        display: inline-block;
+      }
+    }
+  }
+}
+
+/*Add an ellipsis after the home to show there's more */
+@media (max-width: 700px){
+  .breadcrumbs{
+    li:nth-last-child(2){
+      a, span{
+        display: inline-block;
+      }
+    }
+  }
+  .navbar-right {
+    display: none;
+  }
+  .project-level-header .ve-dark-dropdown-nav {
+    max-width: calc(100% - 50px);
+
+    & button.dropdown-toggle {
+      text-align: left;
+      max-width: 100%;
+    }
+    & .selected-dropdown {
+      display: block;
+      min-width: 200px;
+      max-width: calc(100% - 25px);
+      overflow: hidden;
+      white-space: nowrap;
+      float: left;
+      text-overflow: ellipsis;
+    }
+    & .ul.dropdown-menu {
+      max-width: 400px;
+      overflow: hidden;
+      text-align: left;
+    }
+  }
+
+}
+
+
+/*------------------------------------------------------------------
+  3.2 Dropdowns
+-------------------------------------------------------------------*/
+
+.project-level-header .ve-dark-dropdown-nav ul.dropdown-menu {
+  max-width: 400px;
+  text-align: left;
+  min-width: 260px;
+  /*Clearing bootstrap styling so long names can wrap*/
+  > li > a{
+    white-space: normal;
+    word-wrap: break-word;
+  }
+}
+
+/*------------------------------------------------------------------
+4. Banner Header
+-------------------------------------------------------------------*/
+nav.nav-level-banner {
+  background-color: $ve-slate-darker-2;
+  color: white;
+  float: none;
+  height: $navBanner;
+
+  .navbar-nav {
+    margin: 0;
+  }
+  .navbar-banner-header {
+    display: flex;
+    justify-content: center;
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "apiUrl": "https://mcf.openmbee.org",
+  "apiPrefix": "/plugins/mms3-adapter/alfresco/service"
+}

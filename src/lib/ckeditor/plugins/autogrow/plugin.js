@@ -7,7 +7,7 @@
  * @fileOverview The Auto Grow plugin.
  */
 
-'use strict';
+
 
 ( function() {
 	CKEDITOR.plugins.add( 'autogrow', {

@@ -1,0 +1,152 @@
+/*------------------------------------------------------------------
+[Login Table of contents]
+
+1. Layout
+2. Typography
+3. UI Elements
+  3.1 Text Input
+4. Animation
+5. Branding
+
+-------------------------------------------------------------------*/
+
+
+/*------------------------------------------------------------------
+1. Layout
+-------------------------------------------------------------------*/
+
+#ve-origin-select,
+#ve-login {
+
+  background-color: $ve-slate-darker-2;
+  margin: 0;
+  height:100vh;
+
+  .account-wall {
+    min-width: 320px;
+    max-width: 420px;
+    margin: 120px auto;
+    height: 320px;
+    padding: 0 10px;
+  }
+
+  .account-wall .btn-block {
+    margin-top: 40px;
+    bottom: 0;
+    padding: 10px;
+  }
+
+  .select-logout-button {
+    position: relative;
+  }
+
+  @media (max-height:500px){
+    .account-wall{
+      margin: 40px auto;
+    }
+  }
+
+/*------------------------------------------------------------------
+2. Typography
+-------------------------------------------------------------------*/
+
+  .account-wall h2 {
+    margin-bottom: 32px;
+    font-size: 44px;
+    text-align: center;
+    font-weight: 100;
+  }
+
+  .module-disabled {
+    opacity: .3;
+  }
+
+  .back-to-account{
+    float: left;
+    position: absolute;
+    top: 18px;
+    font-size: 18px;
+  }
+
+  .label-text {
+    color: $ve-white-text-lighter-2;
+    font-size: 14px;
+  }
+
+/*------------------------------------------------------------------
+3. Input
+-------------------------------------------------------------------*/
+
+  .login-input {
+    background-color: $ve-slate-base;
+    border: 1px solid $ve-slate-base;
+    border-radius: 2px !important;
+    box-shadow: none;
+    color:white;
+    line-height: 18px;
+    margin: 6px 0 18px;
+    letter-spacing:.05em;
+    height: 36px;
+
+    &:focus {
+      box-shadow: none;
+      border: 1px solid $ve-teal-base;
+    }
+  }
+
+}
+
+/*------------------------------------------------------------------
+4. Animation - slide in selection options when no project provided
+-------------------------------------------------------------------*/
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(16%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.animated-fade-in-slide {
+  animation: .3s ease-out 0s 1 slideInFromLeft;
+}
+
+.fade-in{
+  animation: .7s ease-out 0s 1 fadeIn;
+}
+
+/*------------------------------------------------------------------
+5. Branding
+-------------------------------------------------------------------*/
+#ve-origin-select,
+#ve-login {
+  .login-banner {
+    width: 100%;
+    text-align: center;
+  }
+  .login-box {
+    margin: auto;
+    padding: 20px 5px;
+    width: auto;
+    border: 1px solid #fff;
+  }
+
+  .login-banner ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+}

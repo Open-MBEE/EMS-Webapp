@@ -98,7 +98,7 @@ var MMSApp = function() {
     this.insertTable = $('div.mce-caret');
     this.deleteTable = $('span#mceu_112-text');
     this.fourByFourTable = $('a#mcegrid33');
-    this.mainPaneTextSave = element(by.tagName('mms-button-bar')).$('view-tools');
+    this.mainPaneTextSave = element(by.tagName('button-bar-component')).$('view-tools');
     this.tableCells = element(by.tagName('tbody')).all(by.tagName('td')); 
 
 

@@ -1,0 +1,64 @@
+<div class="modal-header">
+    <h4>{{title}}</h4>
+</div>
+<div class="modal-body">
+    <div class="ve-light-tabs modal-top-tabs" ng-show="showProposeLink">
+        <ul class="nav nav-tabs">
+            <li class="uib-tab nav-item tab-item" ng-class="{'active': !searchExisting}">
+                <a class="nav-link" ng-click="searchExisting = false"><i class="fa fa-plus"></i>Create New</a>
+            </li>
+            <li class="uib-tab nav-item tab-item" ng-class="{'active': searchExisting}">
+                <a class="nav-link" ng-click="searchExisting = true"><i class="fa fa-search"></i>Search for existing</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Seach for exisiting panel -->
+    <div ng-show="searchExisting">
+        <div class="transclude-modal-instructions">
+            {{description}}
+        </div>
+        <div class="form-group" ng-show="!showProposeLink"><br>
+            <label>Link Text:</label>
+            <div class="radio radio-with-label">
+                <label><input type="radio" ng-model="linkType" ng-value="1">&nbsp;Auto-Numbering
+                    <a uib-tooltip="For links within current document, otherwise defaults to name" tooltip-trigger="mouseenter" tooltip-popup-delay="100"><i class="fa fa-info-circle"></i></a></label><br>
+                <label><input type="radio" ng-model="linkType" ng-value="4">&nbsp;Auto-Numbering w/ Name</label><br>
+                    <a uib-tooltip="For links within current document, otherwise defaults to name" tooltip-trigger="mouseenter" tooltip-popup-delay="100"><i class="fa fa-info-circle"></i></a></label><br>
+                <label><input type="radio" ng-model="linkType" ng-value="2">&nbsp;Name</label><br>
+                <label><input type="radio" ng-model="linkType" ng-value="3">&nbsp;Custom&nbsp;
+                    <input type="text" ng-model="linkText" placeholder="custom title"/></label>
+            </div>
+        </div>
+        <label ng-show="showEditableOp" for="nonEditableCheckbox">
+            <input id="nonEditableCheckbox" type="checkbox" ng-model="nonEditableCheckbox">&nbsp;Restrict editing
+        </label>
+
+        <mms-search mms-options="searchOptions" mms-project-id="{{mmsProjectId}}" mms-ref-id="{{mmsRefId}}"></mms-search>
+    </div>
+
+    <!-- Create New Panel -->
+    <div ng-show="!searchExisting">
+        <form>
+            <div class="form-group">
+                <label>Name </label><span class="star-mandatory">*</span>
+                <input class="form-control" type="text" ng-model="newE.name" placeholder="Name your new element" autofocus/>
+            </div>
+            <div class="form-group">
+                <label class="label-documentation">Documentation</label>
+                <textarea mms-ckeditor ng-model="newE.documentation" mms-project-id="{{mmsProjectId}}" mms-ref-id="{{mmsRefId}}" class="textarea-transclude-modal"></textarea>
+            </div>
+            <label>Property to cross-reference</label><span class="star-mandatory">*</span>
+            <div class="radio radio-with-label">
+                <label><input type="radio" name="optradio" value="true" ng-click="toggleRadio('name')">Name</label><br>
+                <label><input type="radio" name="optradio" value="true" ng-click="toggleRadio('documentation')">Documentation</label>
+            </div>
+        </form>
+
+        <p class="help-block pull-left"><i>Fields marked with <span class="star-mandatory">*</span> are required</i></p>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-show="!searchExisting" type="button" ng-click="makeNewAndChoose()">Create & Cross Reference<i class="{{proposeClass}}"></i></button>
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>

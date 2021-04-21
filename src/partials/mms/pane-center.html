@@ -1,0 +1,48 @@
+<div ng-if="view !== null && search === null">
+    <div fa-pane pane-anchor="north" pane-size="36px" pane-no-toggle="true" pane-no-scroll="true">
+        <div class="pane-center-toolbar">
+            <div class="doclib-link">
+                <a type="button" class="btn btn-tools btn-sm" target="_blank" rel="noopener noreferrer" ng-href="{{docLibLink}}" uib-tooltip="Manage files" tooltip-placement="bottom" tooltip-popup-delay="100">
+                    <img src="assets/alfresco-icon-sm.png">DocLib
+                </a>
+                <!--
+                <button type="button" class="btn btn-tools btn-sm share-url" ng-if="!ve_fn" ng-click="handleShareURL()" uib-tooltip="Share Page" tooltip-placement="bottom" tooltip-popup-delay="100"
+                popover-trigger="outsideClick" uib-popover-template="dynamicPopover.templateUrl" popover-title="{{dynamicPopover.title}}" popover-placement="bottom-left">
+                <i class="fa fa-share-alt"></i></button>
+                -->
+            </div>
+            <div class="pane-center-btn-group">
+                <button-bar-component buttons="buttons" mms-bb-api="bbApi" class="bordered-button-bar"></button-bar-component>
+            </div>
+        </div>
+    </div>
+    <div fa-pane pane-anchor="center">
+        <i class="pane-center-spinner fa fa-5x fa-spinner fa-spin" ng-show="ve_viewContentLoading"></i>
+        <div ng-hide="ve_viewContentLoading" class="container-fluid">
+            <div class="pane-center-inner">
+                <div class="ve-notify-banner" ng-show="refOb.type === 'Tag'">
+                    <span><strong>Tags are read only:</strong> Switch to a branch to edit</span>
+                </div>
+                <div class="ve-secondary-text">{{comments.count}} Comment<span ng-if="comments.count !== 1">s</span>
+                    <span ng-if="comments.count > 0">
+                        , Last Commented {{comments.lastCommented | date:'M/d/yy h:mm a'}} by <b>{{comments.lastCommentedBy}}</b></span>
+                </div>
+                <div id="print-div" ng-if="viewOb">
+                    <mms-view mms-element-id="{{viewOb.id}}" mms-commit-id="latest"
+                              mms-project-id="{{projectOb.id}}" mms-ref-id="{{refOb.id}}"
+                              mms-view-api="viewApi" mms-link="vidLink"></mms-view>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div ng-if="search !== null">
+    <i class="pane-center-spinner fa fa-5x fa-spinner fa-spin" ng-show="ve_viewContentLoading"></i>
+    <mms-search mms-options="searchOptions" mms-project-id="{{projectOb.id}}" mms-ref-id="{{refOb.id}}"></mms-search>
+</div>
+
+<script type="text/ng-template" id="shareUrlTemplate.html">
+    <p id="ve-short-url">{{(shortUrl)}}</p>
+    <button ng-click="copyToClipboard($event)" class="btn btn-sm btn-default"><i class="fa fa-copy"></i>Copy</button>
+</script>

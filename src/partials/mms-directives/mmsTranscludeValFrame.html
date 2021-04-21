@@ -1,0 +1,61 @@
+<!-- Most of this code is borrowed from mmsSepc.html -->
+<div class="panel panel-default no-print">
+    <div class="panel-heading clearfix">
+        <h3 class="panel-title pull-left">Value : {{element.name}}</h3>
+        <div class="btn-group pull-right">
+            <button-bar-component class="transclude-panel-toolbar" buttons="buttons" mms-bb-api="bbApi"></button-bar-component>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div ng-if="!isEnumeration">
+            <div ng-if="editValues.length == 0">
+                <select ng-model="addValueType" ng-options="key for (key, value) in addValueTypes"></select>
+                <button class="btn btn-sm btn-default" ng-click="addValue(addValueType)">Add</button>
+            </div>
+            <span class="transclude-val" ng-repeat="value in editValues" ng-switch on="value.type" ng-form="valForm">
+                <div ng-switch-when="LiteralInteger" ng-class="{'has-error': valForm.$error.pattern}">
+                    <div class="form-inline">
+                    <input class="form-control ve-plain-input" type="number" name="intVal" ng-model="value.value" ng-pattern="/^-?\d+$/" ng-blur="cleanupVal(value)">
+                    <a ng-if="!$first" ng-click="removeVal($index)"><i class="fa fa-close"></i></a>
+                    </div>
+                    <label class="control-label mms-error-icon" ng-show="valForm.$error.pattern">Not a valid integer</label>
+                </div>
+                <div ng-switch-when="LiteralUnlimitedNatural" ng-class="{'has-error': valForm.$error.pattern}">
+                    <div class="form-inline">
+                    <input class="form-control ve-plain-input" type="number" name="natVal" ng-model="value.value" ng-pattern="/^\d+$/" ng-blur="cleanupVal(value)">
+                    <a ng-if="!$first" ng-click="removeVal($index)"><i class="fa fa-close"></i></a>
+                    </div>
+                    <label class="control-label mms-error-icon" ng-show="valForm.$error.pattern">Not a valid natural number</label>
+                </div>
+                <div ng-switch-when="LiteralBoolean"><input type="checkbox" ng-model="value.value">&nbsp;{{value.value}}&nbsp;<a ng-if="!$first" ng-click="removeVal($index)"><i class="fa fa-close"></i></a></div>
+                <div ng-switch-when="LiteralReal">
+                    <div class="form-inline">
+                    <input class="form-control ve-plain-input" type="number" ng-model="value.value" step="any">&nbsp;<a ng-if="!$first" ng-click="removeVal($index)"><i class="fa fa-close"></i></a>
+                    </div>
+                </div>
+                <div ng-switch-when="LiteralString">
+                    <textarea ng-if="hasHtml(value.value)" mms-ckeditor mms-project-id="{{element._projectId}}" mms-ref-id="{{element._refId}}" autosave-key="{{element._projectId + element._refId + element.id + 'index:' + $index}}" ng-model="value.value"></textarea>
+                    <div ng-if="!hasHtml(value.value)"><textarea ng-model="value.value"></textarea><a ng-click="addHtml(value)"><i class="fa fa-html5"></i></a></div>
+                    <a ng-if="!$first" ng-click="removeVal($index)"><i class="fa fa-close"></i></a>
+                </div>
+                <div ng-switch-when="OpaqueExpression">
+                    <textarea ng-model="value.body[0]"></textarea><a ng-if="!$first" ng-click="removeVal($index)"><i class="fa fa-close"></i></a>
+                </div>
+                <div ng-switch-default>Editing not supported for now</div>
+            </span>
+            <div ng-if="editValues.length != 0 && isSlot">
+                <button class="btn btn-sm btn-default" ng-click="addValue(editValues[0].type)">Add</button>
+            </div>
+        </div>
+        <!-- if enum and isslot repeat values in element -->
+        <div ng-if="isEnumeration" ng-repeat="val in editValues">
+            <select ng-model="val.instanceId" ng-options="el.id as el.name for el in options"></select>
+            <a ng-if="!$first" ng-click="removeVal($index)"><i class="fa fa-close"></i></a>
+        </div>
+        <div ng-if="(isSlot || editValues.length == 0) && isEnumeration">
+            <button class="btn btn-sm btn-default" ng-click="addEnumerationValue()">Add</button>
+        </div>
+    </div>
+</div>
+
+

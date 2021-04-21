@@ -1,0 +1,7 @@
+#Bundle Builders
+src/mms-directives/directives/charts/([a-zA-Z.0-9]*)\.ts
+import "./$1";
+
+#Fat Arrow conversion
+function\(([a-zA-Z,]*)\)
+($1) =>

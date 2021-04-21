@@ -1,0 +1,15 @@
+/*************************
+  View Editor variables & mixins
+*************************/
+
+/* MMS base styles */
+@import "../../../../../src/assets/styles/base/_mms-mixins.scss";
+@import "../../../../../src/assets/styles/base/_mms-typography.scss";
+@import "../../../../../src/assets/styles/base/_mms-colors.scss";
+
+$background_hover_transition: background-color .2s linear;
+$background_easeout_transition: background-color .1s ease-out;
+$navHeight: 36px;
+$navBanner: 20px;
+$navProject: 56px;
+$navTotal: 92px;

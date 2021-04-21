@@ -15,7 +15,7 @@ CKEDITOR.editorConfig = function( config ) {
 	//config.tabSpaces = 4;
 	//config.height = 350;
 	// config.extraPlugins = 'autosave,iframe,mediaembed,embed,
-	config.extraPlugins = 'liststyle,colordialog,autosave,autogrow,mmscf,mmscomment,mmsvlink,mmsreset,mmssignature,mmsdropdown';
+	config.extraPlugins = 'liststyle,colordialog,autosave,autogrow,stylescombo,mmscf,mmscomment,mmsvlink,mmsreset,mmssignature,mmsdropdown,sourcedialog';
     config.autoGrow_minHeight = 200;
     config.autoGrow_maxHeight = 600;
     config.autoGrow_bottomSpace = 50;
@@ -40,4 +40,16 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// Simplify the dialog windows.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
+
+	config.stylesSet = [
+		{ name: 'Paragraph',		element: 'p' },
+		{ name: 'Heading 1',		element: 'h1' },
+		{ name: 'Heading 2',		element: 'h2' },
+		{ name: 'Heading 3',		element: 'h3' },
+		{ name: 'Heading 4',		element: 'h4' },
+		{ name: 'Heading 5',		element: 'h5' },
+		{ name: 'Heading 6',		element: 'h6' },
+		{ name: 'Preformatted Text',element: 'pre' },
+		{ name: 'Computer Code',	element: 'code' }
+	];
 };
